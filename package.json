@@ -19,5 +19,8 @@
   "devDependencies": {
     "leancloud-realtime": "^4.1.0",
     "leancloud-storage": "^3.7.3"
+  },
+  "dependencies": {
+    "leancloud-storage": "^3.7.3"
   }
 }
