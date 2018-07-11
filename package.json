@@ -18,7 +18,8 @@
   "homepage": "https://github.com/HappyJeannie/music#readme",
   "devDependencies": {
     "leancloud-realtime": "^4.1.0",
-    "leancloud-storage": "^3.7.3"
+    "leancloud-storage": "^3.7.3",
+    "querystring": "^0.2.0"
   },
   "dependencies": {
     "leancloud-storage": "^3.7.3"
