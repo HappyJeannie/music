@@ -18,94 +18,70 @@
 <body>
   <input type="file" id="selectFile">
   <div id="showPic"></div>
-  <button id="upload">开始上传</button>
+  <button id="upload" onclick="on_click_upload_file()">开始上传</button>
   <script src="./../node_modules/leancloud-storage/dist/av-min.js"></script>
   <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-  <script>
-    // var APP_ID = 'YPvb9cfXnyvVeG54DHsOIscm-gzGzoHsz';
-    // var APP_KEY = '4TgQlSLvQtMXkzQcxoC3sLQE';
-
-    // AV.init({
-    //   appId: APP_ID,
-    //   appKey: APP_KEY
-    // });
-
-    // var TestObject = AV.Object.extend('PlayList');
-    // var testObject = new TestObject();
-    // testObject.save({
-    //   cover: 'url',
-    //   name:'summer',
-    //   desc:'balabalabala',
-    //   songs:['1','2']
-    // }).then(function(object) {
-    //   alert('LeanCloud Rocks!');
-    // },
-    // ()=>{
-    //   alert('err')
-    // })
-  let urls;
-  $('#selectFile').on('change',function(e){
-    let file = this.files[0];
-    urls = file;
-    //创建读取文件的对象
-    let reader = new FileReader();
- 
-    //创建文件读取相关的变量
-    let fileurl;
+  <script src="http://gosspublic.alicdn.com/aliyun-oss-sdk.min.js"></script>
+  <script type="text/javascript">
+    var client = new OSS.Wrapper({
+      region: 'oss-cn-***',
+      accessKeyId: '***',
+      accessKeySecret: '***',
+      bucket: '***'
+    });
     
-    //为文件读取成功设置事件
-    reader.onload=function(e) {
-        alert('文件读取完成');
-        fileurl = e.target.result;
-        let html = `<img src=${fileurl}>`
-        $("#showPic").append($(html));
-    };
- 
-    //正式读取文件
-    reader.readAsDataURL(file);
-  })
-  $('#upload').on('click',function(){
-    let url = $('#showPic img').attr('src');
-    let data = new FormData();
-    var _files = $('#selectFile')[0].files[0];
-    data.append("files",_files);
-    console.log(data);
-    $.ajax({
-      type: 'POST',
-      url: 'http://localhost:8888/oss/upload',
-      data: data,
-      dataType: "json",
-      contentType: false,
-      processData: false
-    }).done(function(res){
-      console.log(res);
-      alert('success')
-      })
-  })
-  function getObjectURL() {
-    var file = document.getElementById('upload').files[0];
- 
-    //创建读取文件的对象
-    var reader = new FileReader();
- 
-    //创建文件读取相关的变量
-    var imgFile;
- 
-    //为文件读取成功设置事件
-    reader.onload=function(e) {
-        alert('文件读取完成');
-        imgFile = e.target.result;
-        console.log(imgFile);
-        
-        $("#imgContent").attr('src', imgFile);
-        return imgFile;
-    };
- 
-    //正式读取文件
-    let data = reader.readAsDataURL(file);
-   
-  }
+    client.list().then(function (result) {
+      console.log(result.objects);
+    });
+    function on_click_upload_file(){
 
+
+      var f = document.getElementById("selectFile").files[0]; 
+      console.log(f.name);
+      var val= document.getElementById("selectFile").value;
+      var suffix = val.substr(val.indexOf("."));
+      var obj=timestamp();  // 这里是生成文件名
+
+      var storeAs = 'upload-file'+"/"+obj+suffix;  //命名空间
+      console.log(' => ' + storeAs);
+
+
+ client.multipartUpload(storeAs, f).then(function (result) {
+      console.log(result); //--->返回对象
+      console.log(result.url); //--->返回链接
+ }).catch(function (err) {
+      console.log(err);
+});   
+}
+
+
+
+ /**
+ * 生成文件名
+ * @returns
+ */
+  function timestamp(){  
+      var time = new Date();  
+      var y = time.getFullYear();  
+      var m = time.getMonth()+1;  
+      var d = time.getDate();  
+      var h = time.getHours();  
+      var mm = time.getMinutes();  
+      var s = time.getSeconds();  
+      
+      console.log(y);
+    
+      return ""+y+add0(m)+add0(d)+add0(h)+add0(mm)+add0(s);  
+  }  
+
+
+
+
+
+
+  function add0(m){  
+    return m<10?'0'+m : m;  
+  } 
   </script>
 </body>
 </html>

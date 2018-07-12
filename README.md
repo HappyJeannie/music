@@ -140,3 +140,63 @@ console.log(
 );
 ```
 在终端启动这个服务，输入 `node server.js` ，然后在浏览器中打开 `http://localhost:8888/oss` ， 在控制台可以看到返回的信息。查看[文档](https://help.aliyun.com/document_detail/32070.html?spm=a2c4g.11186623.6.782.O9G9E8)了解上传、查询、删除等功能的实现。
+
+写到这我想说在实现上传功能的过程中我遇到了一个大问题。浏览器端上传图片，受不知道是什么的安全策略影响，反正是拿不到图片的绝对路径，据说是为了保护用户隐私，转成 base64 格式后，nodejs 端会报错文件名过长，反正是在 node 端没有解决这个问题。果断在浏览器中搜索了一下 `OSS js 图片上传`，还真的找到了解决方法。就是在页面中直接引入 OSS 的 js 文件，直接在页面中初始化然后进行增删改查操作，但是这种方法有一个弊端， OSS 的 accessKeyId 、 accessKeySecret 都会暴露给其他人，这个关系到你在阿里云上的资源和消费金额。不多说了，[干货地址](https://blog.csdn.net/shidewen1125/article/details/53442820)。再看下我的代码：
+
+```
+<script src="http://gosspublic.alicdn.com/aliyun-oss-sdk.min.js"></script>
+<script type="text/javascript">
+  var client = new OSS.Wrapper({
+    region: 'oss-cn-***',
+    accessKeyId: '*****',
+    accessKeySecret: '*****',
+    bucket: '*****'
+  });
+  
+  client.list().then(function (result) {
+    // 这个是获取 list 
+    console.log(result.objects);
+  });
+  function on_click_upload_file(){
+    var f = document.getElementById("selectFile").files[0]; 
+    console.log(f.name);
+    var val= document.getElementById("selectFile").value;
+    var suffix = val.substr(val.indexOf("."));
+    var obj=timestamp();  // 这里是生成文件名
+
+    var storeAs = 'upload-file'+"/"+obj+suffix;  //命名空间
+    console.log(' => ' + storeAs);
+
+    client.multipartUpload(storeAs, f).then(function (result) {
+          console.log(result); //--->返回对象
+          console.log(result.url); //--->返回链接
+    }).catch(function (err) {
+          console.log(err);
+    });   
+  }
+
+  /**
+  * 生成文件名
+  * @returns
+  */
+  function timestamp(){  
+      var time = new Date();  
+      var y = time.getFullYear();  
+      var m = time.getMonth()+1;  
+      var d = time.getDate();  
+      var h = time.getHours();  
+      var mm = time.getMinutes();  
+      var s = time.getSeconds(); 
+
+      return ""+y+add0(m)+add0(d)+add0(h)+add0(mm)+add0(s);  
+  }  
+
+  function add0(m){  
+    return m<10?'0'+m : m;  
+  } 
+  </script>
+```
+
+需要说明的是，在 OSS 控制台需要进行跨域设置：
+打开至需要使用的 bucket ，找到 基础设置 -> 跨域访问 -> [设置](https://oss.console.aliyun.com/bucket/oss-cn-beijing/163-demo/cors)，设置规则如下：
+![OSS 跨域规则设置](http://i2.bvimg.com/651731/6ef0051c03aec5c6.jpg)

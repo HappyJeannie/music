@@ -2,3 +2,4 @@ node_modules
 /server.js
 /oss-data.csv
 /oss
+/src/admin.html
