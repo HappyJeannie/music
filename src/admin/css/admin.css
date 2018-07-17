@@ -1,0 +1,286 @@
+#container {
+  width: 100px;
+  height: 100px;
+  border: 1px dashed #999;
+  border-radius: 6px;
+  text-align: center;
+  line-height: 200px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#container #pickfiles {
+  outline: none;
+  box-shadow: none;
+  border: none;
+  background: none;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+}
+#container #pickfiles i {
+  font-size: 30px;
+  color: #666;
+}
+#container p {
+  position: absolute;
+  bottom: 0;
+  left: 106px;
+  line-height: 20px;
+  width: 200px;
+  font-size: 12px;
+  color: #999;
+}
+header {
+  height: 60px;
+  font-size: 12px;
+  background: #fff;
+  box-shadow: 0 4px 6px #efefef;
+  border-bottom: 1px solid #efefef;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  z-index: 100;
+  line-height: 60px;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+}
+header div.logo {
+  padding-top: 15px;
+  line-height: 30px;
+  font-size: 14px;
+  color: #333;
+  margin-left: 20px;
+}
+header div.logo i {
+  font-size: 30px;
+  font-weight: 700;
+  color: #00d3aa;
+}
+header div.logo span.text {
+  color: #333;
+  margin-right: 4px;
+  vertical-align: top;
+}
+header div.add {
+  margin-right: 20px;
+  color: #333;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #00d3aa;
+  line-height: 36px;
+  margin-top: 10px;
+  text-align: center;
+  color: #fff;
+  font-size: 26px;
+  font-weight: 700;
+  box-shadow: 0 0 6px #00d3aa;
+  cursor: pointer;
+}
+header div.user ul {
+  display: flex;
+  flex-direction: row;
+  height: 40px;
+}
+header div.user ul li {
+  cursor: pointer;
+}
+header div.user ul li a {
+  color: inherit;
+}
+header div.user ul li a.login {
+  height: 40px;
+  line-height: 40px;
+  background: #00d3aa;
+  border-radius: 20px;
+  padding: 0px 20px;
+  display: block;
+  vertical-align: top;
+  color: #fff;
+}
+header div.user ul li a.login span {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 14px;
+  font-weight: normal;
+}
+header div.user ul li.avatar {
+  cursor: default;
+  height: 40px;
+  width: 40px;
+  border: 1px solid #00d3aa;
+  border-radius: 50%;
+  background: #00d3aa;
+  margin-right: 6px;
+}
+header div.user ul li.avatar img {
+  width: 100%;
+}
+header div.user ul li.name,
+header div.user ul li.line,
+header div.user ul li.logout {
+  line-height: 40px;
+  padding: 0 6px;
+  cursor: default;
+}
+header div.user ul li.logout {
+  cursor: default;
+}
+footer {
+  height: 40px;
+  font-size: 12px;
+  background: #fff;
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  z-index: 100;
+  line-height: 40px;
+  text-align: center;
+  box-shadow: 0 -4px 6px #efefef;
+  color: #999;
+  letter-spacing: 1px;
+}
+footer a {
+  color: #666;
+}
+body {
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+  padding: 60px 0px 40px;
+  background: #f8f8f8;
+}
+main {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+main div.songs {
+  width: 300px;
+  padding: 0px 0px 20px;
+  border-right: 1px solid #e6e6e6;
+}
+main div.songs h4 {
+  font-size: 16px;
+  color: #333;
+  border-bottom: 1px solid #00d3aa;
+  line-height: 40px;
+  padding-left: 10px;
+  padding-top: 6px;
+  font-weight: normal;
+  background: #fff;
+}
+main div.songs h4 i {
+  color: #00d3aa;
+  margin-right: 4px;
+  font-weight: 18px;
+  font-weight: 700;
+}
+main div.songs ul {
+  padding: 10px 0px;
+  overflow-y: auto;
+}
+main div.songs ul li {
+  padding: 0px 10px;
+  transition: padding 0.4s;
+}
+main div.songs ul li div.item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  line-height: 36px;
+  border-bottom: 1px solid #999;
+  padding: 0px 6px;
+  font-size: 14px;
+  color: #666;
+}
+main div.songs ul li.active div.item {
+  border-bottom-color: #00d3dd;
+  color: #00d3aa;
+}
+main div.editbox {
+  flex: 1;
+  padding: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+main div.editbox div.box {
+  border: 1px solid #00d3aa;
+  padding: 20px 40px 30px 20px;
+  border-radius: 10px;
+  background: #fff;
+}
+main div.editbox div.box h4.title {
+  line-height: 40px;
+  font-weight: normal;
+  border-bottom: 1px solid #00d3aa;
+  margin-bottom: 20px;
+}
+main div.editbox div.box h4.title i {
+  font-weight: 700;
+  color: #00d3aa;
+}
+main div.editbox div.box form {
+  color: #666;
+  font-size: 14px;
+  min-width: 400px;
+}
+main div.editbox div.box form div.form-group {
+  height: 40px;
+  line-height: 40px;
+  margin-top: 10px;
+}
+main div.editbox div.box form div.form-group label {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+main div.editbox div.box form div.form-group label span {
+  width: 100px;
+  text-align: right;
+}
+main div.editbox div.box form div.form-group label input {
+  flex: 1;
+  padding: 0px 10px;
+  border-radius: 4px;
+  border: 1px solid #e6e6e6;
+}
+main div.editbox div.box form div.form-group label input:focus {
+  outline: none;
+}
+main div.editbox div.box form div.form-group.upload {
+  height: 100px;
+}
+main div.editbox div.box form div.form-group.upload label {
+  line-height: 100px;
+}
+main div.editbox div.box form div.form-group.submit {
+  text-align: left;
+  padding-left: 100px;
+}
+main div.editbox div.box form div.form-group.submit button {
+  padding: 0 16px;
+  line-height: 30px;
+  border: 1px solid #00d3aa;
+  background: #fff;
+  border-radius: 4px;
+  color: #666;
+  cursor: pointer;
+}
+main div.editbox div.box form div.form-group.submit button.cancel {
+  background: #eee;
+}
+main div.editbox div.box form div.form-group.fileurl input {
+  background: #ededed;
+  border: 1px solid #efefef;
+  cursor: not-allowed;
+}

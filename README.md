@@ -68,139 +68,89 @@ testObject.save({                                       // 保存记录
 
 #### 2、OSS 环境搭建
 
-leancloud 能够给我们提供一个数据库，里面保存的都是字符串，但是如果我们希望存储文件的话，leancloud 是不可实现的。可使用七牛云或者阿里云的 OSS 存储。七牛云和阿里云都需要实名认证，由于我个人在阿里云已经实名认证过并且配合 PHPer 使用过 OSS ，所有就直接用 OSS 了。
+leancloud 能够给我们提供一个数据库，里面保存的都是字符串，但是如果我们希望存储文件的话，leancloud 是不可实现的。这里采用七牛云的存储服务。
 
-在使用 OSS 服务的过程中，需要根据用户的 AccessKeyId 、AccessKeySecret 进行基础配置，并且需要在服务端运行，此处我们以 Node.js 作为服务端进行 OSS 的 SDk 安装和配置。
+在使用七牛云的过程中，需要根据用户的 AccessKey 、 SecretKey 进行基础配置，并且需要在服务端运行，此处我们以 Node.js 作为服务端进行七牛云的 SDk 安装和配置。
 
-##### 1) 开通阿里云 OSS 服务
+##### 1) 开通七牛云服务
 
-[开通地址](https://www.aliyun.com/product/oss?spm=a2c4g.11186623.2.4.2FZzaq)
+[开通地址](https://www.qiniu.com)
+需要实名认证。
 
-##### 2) [创建 AccessKey ](https://help.aliyun.com/document_detail/53045.html?spm=a2c4g.11186623.2.5.2FZzaq)
+##### 2) [创建 bucket ](https://help.aliyun.com/document_detail/53045.html?spm=a2c4g.11186623.2.5.2FZzaq)
 
-创建完成后，最好直接下载 AccessKey 文件到当前项目的根目录，修改文件名为 `oss-data.csv`。注意，此文件不要上传至 github 中，以免造成不必要的损失。在 `.gitignore` 中添加忽略文件。
+进入控制台后，在侧边栏选择对象存储，进入页面后新建存储空间，访问控制设置为公开空间，存储区域自选，命名为 163-music 。确定创建后，在右上角个人面板中进入密钥管理，能够查询到当前使用的 AccessKey 、SecretKey 。
+在项目根目录创建 qiniu-config.json 文件，并将  AccessKey 、SecretKey 、bucket 值以 json 对象的方式存储到文件中，使用时直接读取文件信息。注意，此文件不要上传至 github 中，以免造成不必要的损失。在 `.gitignore` 中添加忽略文件。
 
 ##### 3) 安装 SDK
 
 在当前项目的根目录的终端中输入以下指令：
 ```
-npm install ali-oss co
+npm install --save plupload@^2.3.2 qiniu-js@^1.0.22
 ```
 
-##### 4) 初始化 Client
+##### 4) 本地启动服务
 
-在项目的根目录下创建文件 `server.js` ，代码如下：
+由于上传图片需要通过服务端获取 uptoken ，所以在本地启动一个 node 服务。在项目根目录创建文件 server.js ，代码请看文件。
+
+##### 5) 在页面中实现上传功能
+
+在 `./src/admin.html` 中引入 `qiniu.min.js` 、`plupload.min.js`，上传代码如下：
 ```
-var http = require("http");
-var fs = require("fs");
-var url = require("url");
-var port = process.env.PORT || 8888;
-var co = require('co');
-var OSS = require('ali-oss');
-
-var server = http.createServer((req,res)=>{
-  let temp = url.parse(req.url,true);
-  let path = temp.pathname;
-  let query = temp.query;
-  let method = req.method;
-
-  if(path === '/oss/upload'){
-    let data = fs.readFileSync('./oss-data.csv','utf-8');             // 读取 AccessKey 数据文件
-    let formatData = data.split('\n').join(',').slice(0,-1).split('"').join('').split(',');       // 处理数据
-    let akId = formatData[2];
-    let akSt = formatData[3];
-    
-    var client = new OSS({
-      region: 'oss-cn-beijing',
-      accessKeyId:akId,
-      accessKeySecret: akSt
-    });
-    res.statusCode = 200;
-    let str = '';
-    co(function* () {
-      str = yield client.listBuckets();
-      console.log(str);
-    }).catch(function (err) {
-      console.log(err);
-    });
-
-    
-    res.setHeader('Content-Type','text/html;charset=utf-8');
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.write(str);
-    res.end();
+var uploader = Qiniu.uploader({
+  runtimes: 'html5',    //上传模式,依次退化
+  browse_button: 'pickfiles',       //上传选择的点选按钮，**必需**
+  uptoken_url: 'http://localhost:8888/uptoken',            //本地启动 node 服务，端口 8888 ，路径 `/uptoken`
+  //uptoken : '', //若未指定uptoken_url,则必须指定 uptoken ,uptoken由其他程序生成
+  //unique_names: true, // 默认 false，key为文件名。若开启该选项，SDK为自动生成上传成功后的key（文件名）。
+  // save_key: true,   // 默认 false。若在服务端生成uptoken的上传策略中指定了 `sava_key`，则开启，SDK会忽略对key的处理
+  domain: 'http://qiniu-plupload.qiniudn.com/',   //bucket 域名，下载资源时用到，**必需**
+  get_new_uptoken: false,  //设置上传文件的时候是否每次都重新获取新的token
+  container: 'container',           //上传区域DOM ID，默认是browser_button的父元素，
+  max_file_size: '5mb',           //最大文件体积限制
+  max_retries: 3,                   //上传失败最大重试次数
+  dragdrop: true,                   //开启可拖曳上传
+  drop_element: 'container',        //拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+  chunk_size: '4mb',                //分块上传时，每片的体积
+  auto_start: true,                 //选择文件后自动上传，若关闭需要自己绑定事件触发上传
+  init: {
+      'FilesAdded': function(up, files) {
+          plupload.each(files, function(file) {
+              // 文件添加进队列后,处理相关的事情
+          });
+      },
+      'BeforeUpload': function(up, file) {
+              // 每个文件上传前,处理相关的事情
+      },
+      'UploadProgress': function(up, file) {
+              // 每个文件上传时,处理相关的事情
+      },
+      'FileUploaded': function(up, file, info) {
+              // 每个文件上传成功后,处理相关的事情
+      },
+      'Error': function(up, err, errTip) {
+              //上传出错时,处理相关的事情
+      },
+      'UploadComplete': function() {
+              //队列文件处理完毕后,处理相关的事情
+      }//,
+      //'Key': function(up, file) {
+          // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
+          // 该配置必须要在 unique_names: false , save_key: false 时才生效
+          //var key = "";
+          // do something with key here
+          //return key
+      //}
   }
-})
-server.listen(port);
-console.log(
-  "监听 " +
-    port +
-    " 成功\n打开 http://localhost:" +
-    port
-);
+});
 ```
-在终端启动这个服务，输入 `node server.js` ，然后在浏览器中打开 `http://localhost:8888/oss` ， 在控制台可以看到返回的信息。查看[文档](https://help.aliyun.com/document_detail/32070.html?spm=a2c4g.11186623.6.782.O9G9E8)了解上传、查询、删除等功能的实现。
+注意以上代码需要在 server.js 文件启动的情况下运行。
 
-写到这我想说在实现上传功能的过程中我遇到了一个大问题。浏览器端上传图片，受不知道是什么的安全策略影响，反正是拿不到图片的绝对路径，据说是为了保护用户隐私，转成 base64 格式后，nodejs 端会报错文件名过长，反正是在 node 端没有解决这个问题。果断在浏览器中搜索了一下 `OSS js 图片上传`，还真的找到了解决方法。就是在页面中直接引入 OSS 的 js 文件，直接在页面中初始化然后进行增删改查操作，但是这种方法有一个弊端， OSS 的 accessKeyId 、 accessKeySecret 都会暴露给其他人，这个关系到你在阿里云上的资源和消费金额。不多说了，[干货地址](https://blog.csdn.net/shidewen1125/article/details/53442820)。再看下我的代码：
+### 三、页面创建
 
-```
-<script src="http://gosspublic.alicdn.com/aliyun-oss-sdk.min.js"></script>
-<script type="text/javascript">
-  var client = new OSS.Wrapper({
-    region: 'oss-cn-***',
-    accessKeyId: '*****',
-    accessKeySecret: '*****',
-    bucket: '*****'
-  });
-  
-  client.list().then(function (result) {
-    // 这个是获取 list 
-    console.log(result.objects);
-  });
-  function on_click_upload_file(){
-    var f = document.getElementById("selectFile").files[0]; 
-    console.log(f.name);
-    var val= document.getElementById("selectFile").value;
-    var suffix = val.substr(val.indexOf("."));
-    var obj=timestamp();  // 这里是生成文件名
+#### 1、管理员页面创建
 
-    var storeAs = 'upload-file'+"/"+obj+suffix;  //命名空间
-    console.log(' => ' + storeAs);
+在 URL / URI 中是不能包含汉字或者特殊字符，如果出现这种情况，那么会将汉字或者特殊字符转换成 URL Eacape Code 编码的字符串，如 `你` 则会被转换成 `%E4%BD%A0`
 
-    client.multipartUpload(storeAs, f).then(function (result) {
-          console.log(result); //--->返回对象
-          console.log(result.url); //--->返回链接
-    }).catch(function (err) {
-          console.log(err);
-    });   
-  }
-
-  /**
-  * 生成文件名
-  * @returns
-  */
-  function timestamp(){  
-      var time = new Date();  
-      var y = time.getFullYear();  
-      var m = time.getMonth()+1;  
-      var d = time.getDate();  
-      var h = time.getHours();  
-      var mm = time.getMinutes();  
-      var s = time.getSeconds(); 
-
-      return ""+y+add0(m)+add0(d)+add0(h)+add0(mm)+add0(s);  
-  }  
-
-  function add0(m){  
-    return m<10?'0'+m : m;  
-  } 
-  </script>
-```
-
-需要说明的是，在 OSS 控制台需要进行跨域设置：
-打开至需要使用的 bucket ，找到 基础设置 -> 跨域访问 -> [设置](https://oss.console.aliyun.com/bucket/oss-cn-beijing/163-demo/cors)，设置规则如下：
-![OSS 跨域规则设置](http://i2.bvimg.com/651731/6ef0051c03aec5c6.jpg)
-
-### 3、管理员页面创建
 
 这个里面的音乐只有管理员有增删改查的权限。
