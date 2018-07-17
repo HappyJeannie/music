@@ -1,5 +1,5 @@
 node_modules
-/server.js
+/qiniu-config.json
 /oss-data.csv
 /oss
 /src/admin.html

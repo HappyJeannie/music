@@ -22,6 +22,9 @@
     "querystring": "^0.2.0"
   },
   "dependencies": {
-    "leancloud-storage": "^3.7.3"
+    "leancloud-storage": "^3.7.3",
+    "plupload": "^2.3.2",
+    "qiniu": "^7.2.1",
+    "qiniu-js": "^1.0.22"
   }
 }
