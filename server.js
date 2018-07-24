@@ -26,6 +26,7 @@ var server = http.createServer((req,res)=>{
     
     res.setHeader('Content-Type','text/json;charset=utf-8');
     res.setHeader('Access-Control-Allow-Origin','*');
+    res.setHeader('Access-Control-Allow-Headers','*');
     res.write(`
       {
         "uptoken":"${uploadToken}"
