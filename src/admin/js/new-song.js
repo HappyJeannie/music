@@ -55,4 +55,5 @@
     }
   }
   controller.init(view,model)
+  window.app.newSong = controller;
 }

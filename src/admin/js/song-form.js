@@ -54,5 +54,6 @@
       this.view.render(this.model.data);
     }
   }
-  controller.init(view,model)
+	controller.init(view,model)
+	window.app.editSong = controller;
 }
