@@ -3,9 +3,9 @@
 ### 一、项目架构
 
 ### 1、用例图
-![网易云音乐普通用户用例图](http://i2.bvimg.com/651731/fd54c8601cf3075d.jpg)
+![普通用户用例图](https://github.com/HappyJeannie/Demo/blob/master/imgs/music/普通用户用例图.png)
 
-![网易云音乐管理员用例图](http://i4.bvimg.com/651731/b16d5f03286cc449.jpg)
+![管理员用例图](https://github.com/HappyJeannie/Demo/blob/master/imgs/music/管理员用例图.png)
 
 用例图是用来做*需求分析*时使用的图示，
 
@@ -13,7 +13,7 @@
 用例图绘制完成后就是绘制线框图，也就是我们常说的原型。在这我就不进行绘制了。
 
 ### 3、系统架构图
-![网易云音乐系统架构图](http://i2.bvimg.com/651731/93ebc8d4f783e15c.jpg)
+![系统架构图](https://github.com/HappyJeannie/Demo/blob/master/imgs/music/3、系统架构图.png)
 
 ### 二、环境搭建
 
