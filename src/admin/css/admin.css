@@ -184,9 +184,12 @@ main div.songs h4 i {
   font-weight: 18px;
   font-weight: 700;
 }
+main div.songs #songs-container {
+  height: calc(100% - 40px);
+  overflow-y: auto;
+}
 main div.songs ul {
   padding: 10px 0px;
-  overflow-y: auto;
 }
 main div.songs ul li {
   padding: 0px 10px;
