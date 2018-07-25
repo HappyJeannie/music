@@ -17,7 +17,7 @@
 					<div class="form-group">
 						<label for="">
 							<span class="form-title">歌手：</span>
-							<input type="text" placeholder="歌手" name="singer">
+							<input type="text" placeholder="歌手" name="singer" value="__singer__">
 						</label>
 					</div>
 					<div class="form-group upload">
@@ -44,13 +44,16 @@
 			</div>
     `,
     render(data = {}){
-			let placeholders = ['name','url','singer'];
+			let placeholders = ['name','url','singer','id'];
 			let html = this.tpl;
 			placeholders.map((str) => {
 				html = html.replace(`__${str}__`,data[str] || '');
 			})
       $(this.el).html(html);
-    }
+		},
+		reset(){
+			this.render({});
+		}
   }
   let model = {
 		data:{
@@ -68,13 +71,23 @@
 				song.set(item,data[item]);
 			}
 			let that = this;
-			song.save().then(function (song) {
-				console.log('objectId is ' + song);
-				console.log(song)
-				//that.view.render({})
-			}, function (error) {
-				console.error(error);
-			});
+			return new Promise((resolve,reject) =>{
+				song.save().then(function (song) {
+					let id = song.id;
+					console.log(that.data);
+					Object.assign(that.data,{
+						id,
+						...song.attributes
+					})
+					console.log(that.data);
+					resolve(that.data);
+					
+					//that.view.render({})
+				}, function (error) {
+					console.error(error);
+					reject(error);
+				});
+			})
 		}
   }
   let controller = {
@@ -91,20 +104,22 @@
 			})
 		},
 		bindEvents(){
-			console.log(123);
 			this.view.$el.on('submit','form',(e)=>{
-				console.log(456);
 				e.preventDefault();
-				console.log('表单提交')
 				let names = ['name','singer','url'];
 				this.checkForm(names);
 				let hash = {};
 				names.map((item) => {
-					console.log(item);	
 					hash[item] = this.view.$el.find(`[name="${item}"]`).val();
 				})
 				console.log(hash);
-				this.model.createSong(hash);
+				this.model.createSong(hash)
+					.then((res) => {
+						console.log('添加完了之后的操作')
+						console.log(res);
+						this.view.reset();
+						window.eventHub.emit('create',res)
+					});
 				
 			})
 		},
