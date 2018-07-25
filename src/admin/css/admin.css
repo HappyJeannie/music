@@ -279,6 +279,9 @@ main div.editbox div.box form div.form-group.submit button {
   color: #666;
   cursor: pointer;
 }
+main div.editbox div.box form div.form-group.submit button:focus {
+  outline: none;
+}
 main div.editbox div.box form div.form-group.submit button.cancel {
   background: #eee;
 }
