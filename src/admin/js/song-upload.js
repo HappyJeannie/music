@@ -1,5 +1,4 @@
 {
-  console.log(1);
   let view = {
     el : '#container',
     find(selector){
@@ -14,8 +13,12 @@
       this.view = view;
       this.model = model;
       this.initUpload();
+      window.eventHub.on('create',(data) => {
+        this.initUpload();
+			})
     },
     initUpload(){
+      let that = this;
       let uploader = Qiniu.uploader({
         runtimes: 'html5', //上传模式,依次退化
         browse_button: this.view.find('#pickfiles'), //上传选择的点选按钮，**必需**
@@ -29,11 +32,12 @@
         max_file_size: '5mb', //最大文件体积限制
         max_retries: 3, //上传失败最大重试次数
         dragdrop: true, //开启可拖曳上传
-        drop_element: $(this.view.el).get(0), //拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+        drop_element: this.view.find('#pickfiles'), //拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
         chunk_size: '4mb', //分块上传时，每片的体积
         auto_start: true, //选择文件后自动上传，若关闭需要自己绑定事件触发上传
         init: {
           'FilesAdded': function (up, files) {
+            console.log('添加文件')
             plupload.each(files, function (file) {
               // 文件添加进队列后,处理相关的事情
             });
@@ -54,7 +58,7 @@
             //    "key": "gogopher.jpg"
             //  }
             // 参考http://developer.qiniu.com/docs/v6/api/overview/up/response/simple-response.html
-  
+            
             var domain = up.getOption('domain');
             var res = JSON.parse(info.response);
             var sourceLink = domain + encodeURIComponent(res.key);
@@ -64,6 +68,7 @@
               name: res.key
             }
             window.eventHub.emit('upload',data)
+            that.initUpload();
           },
           'Error': function (up, err, errTip) {
             //上传出错时,处理相关的事情

@@ -1,4 +1,3 @@
-
 {
   let view = {
     el : '#songs-container',
@@ -16,13 +15,13 @@
         </div>					
       </li>
     `,
-    tplWrap:`<ul>__list__</ul>`,
+    tplUl:`<ul>__list__</ul>`,
     render(data){
       let liHtml='';
       data.map((item) => {
         liHtml += this.tplLi.replace('__name__',item['name']);
       })
-      $(this.el).html(this.tplWrap.replace('__list__',liHtml));
+      $(this.el).html(this.tplUl.replace('__list__',liHtml));
     }
   }
 
@@ -53,12 +52,8 @@
     init(view,model){
       this.view = view;
       this.model = model;
-      console.log('输出model数据');
-      console.log(this.model.data)
       this.view.render(this.model.data);
       window.eventHub.on('create',(data) => {
-				console.log('song list 模块得到了 data')
-        console.log(data);
         this.model.data.push(data);
         this.view.render(this.model.data);
 			})

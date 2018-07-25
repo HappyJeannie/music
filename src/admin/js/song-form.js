@@ -24,7 +24,7 @@
 						<label for="">
 							<span class="form-title">上传文件：</span>
 							<div id="container">
-								<button id="pickfiles"><i class="iconfont icon-cloudtouploadyunshangchuan"></i></button>
+								<button type="button" id="pickfiles"><i class="iconfont icon-cloudtouploadyunshangchuan"></i></button>
 								<p class="tips">点击或拖拽文件，大小不超过 5 M</p>
 							</div>
 							<input type="hidden" name="songurl">
@@ -105,9 +105,12 @@
 		},
 		bindEvents(){
 			this.view.$el.on('submit','form',(e)=>{
+				alert('表单提交了')
 				e.preventDefault();
 				let names = ['name','singer','url'];
-				this.checkForm(names);
+				if(!this.checkForm(names)){
+					return false;
+				}
 				let hash = {};
 				names.map((item) => {
 					hash[item] = this.view.$el.find(`[name="${item}"]`).val();
@@ -119,17 +122,20 @@
 						console.log(res);
 						this.view.reset();
 						window.eventHub.emit('create',res)
+						$('input[type="hidden"]').val('');
 					});
 				
 			})
 		},
 		checkForm(names){
+			let canSubmit = true;
 			for(let i = 0;i<names.length;i++){
 				if(this.view.$el.find('[name="'+names[i]+'"]').val().length === 0){
 					alert('表单信息为必填');
-					return false;
+					canSubmit = false;
 				}
 			}
+			return canSubmit;
 		}
   }
 	controller.init(view,model)
