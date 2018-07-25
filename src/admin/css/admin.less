@@ -192,6 +192,7 @@ main{
       li{
         padding: 0px 10px;
         transition: padding 0.4s;
+        margin-bottom: 6px;
         div.item{
           display: flex;
           flex-direction: row;
@@ -201,7 +202,38 @@ main{
           padding: 0px 6px;
           font-size: 14px;
           color: #666;
+          div.info{
+            display: flex;
+            flex: 1;
+            div.msg{
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              p{
+                line-height: 26px;
+                i{
+                  margin-right: 4px;
+                  line-height: 26px;
+                }
+              }
+              
+            }
+            span.num{
+              line-height: 52px;
+              width: 30px;
+              text-align: center;
+            }
+          }
+          div.options{
+            width: 40px;
+            line-height: 52px;
+            i{
+              cursor: pointer;
+            }
+          }
+
         }
+        
         &.active{
           // background-color: #00d3aa;
           

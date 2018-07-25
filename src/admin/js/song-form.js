@@ -11,7 +11,7 @@
 					<div class="form-group">
 						<label for="">
 							<span class="form-title">歌曲名称：</span>
-							<input type="text" placeholder="歌曲名称" name="name" value="__name__" readonly>
+							<input type="text" placeholder="歌曲名称" name="name" value="__name__">
 						</label>
 					</div>
 					<div class="form-group">
@@ -131,10 +131,11 @@
 			let canSubmit = true;
 			for(let i = 0;i<names.length;i++){
 				if(this.view.$el.find('[name="'+names[i]+'"]').val().length === 0){
-					alert('表单信息为必填');
 					canSubmit = false;
 				}
 			}
+			if(!canSubmit)alert('表单信息为必填');
+			
 			return canSubmit;
 		}
   }

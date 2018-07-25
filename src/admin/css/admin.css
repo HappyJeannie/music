@@ -194,6 +194,7 @@ main div.songs ul {
 main div.songs ul li {
   padding: 0px 10px;
   transition: padding 0.4s;
+  margin-bottom: 6px;
 }
 main div.songs ul li div.item {
   display: flex;
@@ -204,6 +205,34 @@ main div.songs ul li div.item {
   padding: 0px 6px;
   font-size: 14px;
   color: #666;
+}
+main div.songs ul li div.item div.info {
+  display: flex;
+  flex: 1;
+}
+main div.songs ul li div.item div.info div.msg {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+main div.songs ul li div.item div.info div.msg p {
+  line-height: 26px;
+}
+main div.songs ul li div.item div.info div.msg p i {
+  margin-right: 4px;
+  line-height: 26px;
+}
+main div.songs ul li div.item div.info span.num {
+  line-height: 52px;
+  width: 30px;
+  text-align: center;
+}
+main div.songs ul li div.item div.options {
+  width: 40px;
+  line-height: 52px;
+}
+main div.songs ul li div.item div.options i {
+  cursor: pointer;
 }
 main div.songs ul li.active div.item {
   border-bottom-color: #00d3dd;
