@@ -51,9 +51,12 @@
     init(view,model){
       this.view = view;
       this.model = model;
-      this.view.render(this.model.data);
+			this.view.render(this.model.data);
+			window.eventHub.on('upload',(data)=>{
+				console.log('new song 模块得到了data')
+				console.log(data);
+			})
     }
   }
   controller.init(view,model)
-  window.app.newSong = controller;
 }

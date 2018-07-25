@@ -59,7 +59,11 @@
             var res = JSON.parse(info.response);
             var sourceLink = domain + encodeURIComponent(res.key);
             console.log(sourceLink);
-            window.app.songList.active('测试输出')
+            let data = {
+              url : sourceLink,
+              name: res.key
+            }
+            window.eventHub.emit('upload',data)
           },
           'Error': function (up, err, errTip) {
             //上传出错时,处理相关的事情
@@ -81,5 +85,4 @@
   }
 
   controller.init(view,model)
-  window.app.songUpload = controller;
 }

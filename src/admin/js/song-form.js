@@ -8,7 +8,7 @@
 					<div class="form-group">
 						<label for="">
 							<span class="form-title">歌曲名称：</span>
-							<input type="text" placeholder="歌曲名称" required name="song">
+							<input type="text" placeholder="歌曲名称" name="song" value="__name__" readonly>
 						</label>
 					</div>
 					<div class="form-group">
@@ -30,7 +30,7 @@
 					<div class="form-group fileurl">
 							<label for="">
 								<span class="form-title">资源路径：</span>
-								<input type="text" placeholder="资源路径" required readonly>
+								<input type="text" placeholder="资源路径" readonly value="__url__">
 							</label>
 						</div>
 					<div class="form-group submit">
@@ -40,20 +40,29 @@
 				</form>
 			</div>
     `,
-    render(data){
-      $(this.el).html(this.tpl);
+    render(data = {}){
+			let placeholders = ['name','url'];
+			let html = this.tpl;
+			placeholders.map((str) => {
+				html = html.replace(`__${str}__`,data[str] || '');
+			})
+      $(this.el).html(html);
     }
   }
   let model = {
-
+		data:{}
   }
   let controller = {
     init(view,model){
       this.view = view;
       this.model = model;
-      this.view.render(this.model.data);
-    }
+			this.view.render(this.model.data);
+			window.eventHub.on('upload',(data) => {
+				console.log('song from 模块得到了 data')
+				console.log(data);
+				this.view.render(data);
+			})
+		}
   }
 	controller.init(view,model)
-	window.app.editSong = controller;
 }
