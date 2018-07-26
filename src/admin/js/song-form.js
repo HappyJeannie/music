@@ -6,7 +6,7 @@
 		},
     tpl : `
       <div class="box">
-				<h4 class="title"><i class="iconfont icon-settings"></i> Edit Song</h4>
+				<h4 class="title"><i class="iconfont icon-settings"></i> __mode__</h4>
 				<form action="">
 					<div class="form-group">
 						<label for="">
@@ -44,19 +44,26 @@
 			</div>
     `,
     render(data = {}){
-			let placeholders = ['name','url','singer','id'];
+			let placeholders = ['name','url','singer','id','isNew'];
 			let html = this.tpl;
 			placeholders.map((str) => {
-				html = html.replace(`__${str}__`,data[str] || '');
+				if(str === 'isNew'){
+					let title = data['isNew']? 'Add Song' : 'Edit Song';
+					html = html.replace('__mode__',title);
+				}else{
+					html = html.replace(`__${str}__`,data[str] || '');
+				}
+				
 			})
       $(this.el).html(html);
 		},
-		reset(){
-			this.render({});
+		reset(data){
+			this.render(data || {});
 		}
   }
   let model = {
 		data:{
+			isNew : true ,
 			name : '',			// 歌曲名称
 			url : '',				// 歌曲地址
 			singer : '',		// 歌手
@@ -75,19 +82,47 @@
 				song.save().then(function (song) {
 					let id = song.id;
 					console.log(that.data);
-					Object.assign(that.data,{
+					that.data = {
 						id,
 						...song.attributes
-					})
-					console.log(that.data);
+					}
 					resolve(that.data);
 					
 					//that.view.render({})
 				}, function (error) {
-					console.error(error);
 					reject(error);
 				});
 			})
+		},
+		editSong(songInfo){
+			// 保存到云端
+			let { tableName , name ,id ,singer,url} = songInfo;
+			// 第一个参数是 className，第二个参数是 objectId
+			let song = AV.Object.createWithoutData(tableName, id);
+			// 修改属性
+			song.set('name',name);
+			song.set('singer',singer);
+			song.set('url',url);
+			let that = this;
+			return new Promise((resolve,reject) => {
+				
+				song.save().then(
+					(song) => {
+						let id = song.id;
+						console.log('更新成功')
+						console.log(that.data);
+						that.data = {
+							id,
+							...song.attributes
+						}
+						resolve(that.data);
+					},
+					(error) => {
+						reject(error);
+					}
+				)
+			})
+			
 		}
   }
   let controller = {
@@ -97,11 +132,7 @@
       this.model = model;
 			this.view.render(this.model.data);
 			this.bindEvents();
-			window.eventHub.on('upload',(data) => {
-				console.log('song from 模块得到了 data')
-				console.log(data);
-				this.view.render(data);
-			})
+			this.bindEventsHub();
 		},
 		bindEvents(){
 			this.view.$el.on('submit','form',(e)=>{
@@ -116,14 +147,46 @@
 					hash[item] = this.view.$el.find(`[name="${item}"]`).val();
 				})
 				console.log(hash);
-				this.model.createSong(hash)
+				if(this.model.data.isNew){
+					alert('新增数据')
+					this.model.createSong(hash)
 					.then((res) => {
 						console.log('添加完了之后的操作')
 						console.log(res);
 						this.view.reset();
 						window.eventHub.emit('create',res)
-						$('input[type="hidden"]').val('');
 					});
+				}else{
+					alert('编辑数据')
+					hash.id = this.model.data.id;
+					hash.tableName = 'Songs';
+					this.model.editSong(hash)
+					.then((res) => {
+						console.log('编辑完了之后的操作')
+						console.log(res);
+						this.model.data.isNew = true;
+						this.view.reset({'isNew':true});
+						window.eventHub.emit('update',res);
+					});
+				}
+				
+				
+			})
+		},
+		bindEventsHub(){
+			window.eventHub.on('upload',(data) => {
+				// 上传文件后将文件信息赋值到表单
+				console.log('song from 模块得到了 data')
+				console.log(data);
+				this.view.render(data);
+			})
+
+			window.eventHub.on('edit',(data) => {
+				// 编辑文件后 表单接收数据
+				console.log('表单数据');
+				console.log(data);
+				Object.assign(this.model.data,data);
+				this.view.render(this.model.data);
 				
 			})
 		},

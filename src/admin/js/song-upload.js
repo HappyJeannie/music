@@ -13,9 +13,7 @@
       this.view = view;
       this.model = model;
       this.initUpload();
-      window.eventHub.on('create',(data) => {
-        this.initUpload();
-			})
+      this.bindEventsHub();
     },
     initUpload(){
       let that = this;
@@ -86,6 +84,14 @@
           //}
         }
       });
+    },
+    bindEventsHub(){
+      window.eventHub.on('create',(data) => {
+        this.initUpload();
+      })
+      window.eventHub.on('update',(data) => {
+        this.initUpload();
+			})
     }
   }
 

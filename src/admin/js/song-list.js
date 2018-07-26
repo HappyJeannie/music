@@ -21,6 +21,7 @@
     `,
     tplUl:`<ul>__list__</ul>`,
     render(data){
+      
       console.log(data);
       let liHtml='';
       data.map((item) => {
@@ -67,7 +68,7 @@
           }
           songsList.push(song)
         }
-        that.data = songsList;
+        //that.data = songsList;
         resolve(songsList);
       }).then(function(todos) {
         // 更新成功
@@ -78,23 +79,15 @@
     },
     delSong(songInfo){
       let {id,tableName} = songInfo;
-      console.log(id);
-      console.log(tableName);
       return new Promise((resolve,reject) => {
-        AV.Query.doCloudQuery('delete from '+ tableName +' where objectId="'+ id +'"').then(function (res) {
+        let song = AV.Object.createWithoutData(tableName, id);
+        song.destroy().then(function (success) {
           // 删除成功
-          console(res);
+          resolve(success)
         }, function (error) {
-          // 异常处理
+          // 删除失败
+          reject(error);
         });
-        // let song = AV.Object.createWithoutData(tableName, id);
-        // song.destroy().then(function (success) {
-        //   // 删除成功
-        //   resolve(success)
-        // }, function (error) {
-        //   // 删除失败
-        //   reject(error);
-        // });
       })
     }
   };
@@ -113,41 +106,73 @@
     bindEvents(){
       // 增加删除事件
       this.delEvent();
+      // 增加编辑事件
+      this.editEvent();
     },
     getAllSongs(){
-      this.model.fetchAll().then(() => {
+      this.model.fetchAll().then((res) => {
+        this.model.data = res;
         this.view.render(this.model.data);
       });
     },
     bindEventsHub(){
       // 事件订阅，监听是否新增了歌曲
       window.eventHub.on('create',(data) => {
+        console.log('list 增加数据');
+        console.log(data);
         this.model.data.push(data);
+        this.view.render(this.model.data);
+        $(this.view.el).scrollTop($(this.view.el)[0].scrollHeight);
+      })
+      // 事件订阅，监听是否编辑了歌曲
+      window.eventHub.on('update',(data) => {
+        console.log('list 更新数据');
+        console.log(data);
+        let target = $(this.view.el).find('li.active');
+        let idx = target.index();
+        target.removeClass('active');
+        console.log(idx);
+        this.model.data[idx].id = data.id;
+        this.model.data[idx].name = data.name;
+        this.model.data[idx].url = data.url;
+        this.model.data[idx].singer = data.singer;
         this.view.render(this.model.data);
 			})
     },
     delEvent(){
-      let that = this;
       $(this.view.el).on('click','li .del',(e)=>{
         e.stopPropagation();
-        //$(target).parents('li').remove();
-        console.log('click');
-        console.log(e.target);
         let target = e.target;
-        
         let idx = $(target).parents('li').index();
-        console.log(idx);
         let songInfo = {
           id : this.model.data[idx].id,
           tableName : 'Songs'
         }
         this.model.delSong(songInfo)
           .then((res) => {
-            console.log('删除成功');
+            alert('删除成功');
             this.model.data.splice(idx,1);
             this.view.render(this.model.data);
           })
-        
+      })
+    },
+    editEvent(){
+      $(this.view.el).on('click','li .edit',(e)=>{
+        e.stopPropagation();
+        let target = e.target;
+        let $li = $(target).parents('li')
+        $li.addClass('active').siblings().removeClass('active');
+        let idx = $li.index();
+        let songInfo = {
+          id : this.model.data[idx].id,
+          tableName : 'Songs',
+          singer : this.model.data[idx].singer,
+          name : this.model.data[idx].name,
+          url : this.model.data[idx].url,
+          isNew : false,
+        }
+        // 点击编辑触发事件
+        window.eventHub.emit('edit',songInfo);
       })
     }
   }
