@@ -4,6 +4,7 @@ header {
   left: 0;
   color: #fff;
   width: 100%;
+  z-index: 10;
 }
 header div.head {
   display: -webkit-box;
@@ -177,4 +178,64 @@ main div.new h2::before {
   width: 2px;
   height: 16px;
   background-color: #d33a31;
+}
+main div.new div.songs ul {
+  padding-left: 10px;
+}
+main div.new div.songs ul li {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  border-bottom: 1px solid #efefef;
+  padding: 6px 0px;
+}
+main div.new div.songs ul li div.msg {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+  flex: 1 1 auto;
+  padding: 6px 0;
+  width: 0;
+}
+main div.new div.songs ul li div.msg p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: normal;
+  font-size: 17px;
+}
+main div.new div.songs ul li div.msg p:last-child {
+  font-size: 12px;
+  color: #888;
+}
+main div.new div.songs ul li div.msg p i {
+  display: inline-block;
+  width: 12px;
+  height: 8px;
+  margin-right: 4px;
+  background: url('../img/index_icon_3x.png') no-repeat;
+  background-size: 166px 97px;
+}
+main div.new div.songs ul li div.play {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  padding: 0 10px;
+}
+main div.new div.songs ul li div.play i {
+  font-size: 22px;
+  color: #999;
+}
+footer {
+  height: 300px;
+  background: url('../img/footer.png') no-repeat center center;
+  background-size: cover;
+}
+footer div.auth {
+  line-height: 300px;
+  font-size: 16px;
+  color: #999;
+  text-align: center;
 }
