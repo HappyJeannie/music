@@ -87,6 +87,15 @@ header div.tabbar nav li.selected span::before {
 main {
   padding-top: 124px;
 }
+main .tab-wrap {
+  padding-bottom: 24px;
+}
+main .tab-wrap div.tab-item {
+  display: none;
+}
+main .tab-wrap div.tab-item#page-1 {
+  display: block;
+}
 main div.recommand h2 {
   position: relative;
   padding-left: 9px;
@@ -106,8 +115,11 @@ main div.recommand h2::before {
   height: 16px;
   background-color: #d33a31;
 }
-main div.recommand div.songs {
-  padding-bottom: 24px;
+main div.recommand div.tab-item {
+  display: none;
+}
+main div.recommand div.tab-item#page-1 {
+  display: block;
 }
 main div.recommand div.songs ul {
   font-size: 0;

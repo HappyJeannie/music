@@ -93,6 +93,15 @@ header {
 
 main {
   padding-top: 124px;
+  .tab-wrap{
+    padding-bottom: 24px; 
+    div.tab-item{
+      display: none;
+      &#page-1{
+        display: block;
+      }
+    }
+  }
   div.recommand {
     h2 {
       position: relative;
@@ -113,8 +122,14 @@ main {
         background-color: #d33a31;
       }
     }
+    div.tab-item{
+      display: none;
+      &#page-1{
+        display: block;
+      }
+    }
     div.songs {
-      padding-bottom: 24px; 
+      
       ul {
         font-size: 0;
         li {

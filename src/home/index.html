@@ -17,82 +17,94 @@
         <h4 class="text">云音乐</h4>
       </div>
     </div>
-    <div class="tabbar">
+    <div class="tabbar" id="tabs">
       <nav>
-        <li class="selected">
+        <li class="selected" data-tabname='page-1'>
           <span>推荐音乐</span>
         </li>
-        <li>
+        <li data-tabname='page-2'>
           <span>热歌榜</span>
         </li>
-        <li>
+        <li data-tabname='page-3'>
           <span>搜索</span>
         </li>
       </nav>
     </div>
   </header>
   <main>
-    <div class="recommand">
-      <h2>推荐歌单</h2>
-      <div class="songs">
-        <ul>
-          <li>
-            <a href="javascript:;">
-              <div class="img">
-                <img src="./img/cover.jpg">
-                <span class="num"><i class="icon iconfont icon-erji"></i> 71.4万</span>
-              </div>
-              <p class="">幼稚园| 人间不正经生活手册</p>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:;">
-              <div class="img">
-                <img src="./img/cover.jpg">
-                <span class="num">71.4万</span>
-              </div>
-              <p class="">幼稚园| 人间不正经生活手册</p>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:;">
-              <div class="img">
-                <img src="./img/cover.jpg">
-                <span class="num">71.4万</span>
-              </div>
-              <p class="">幼稚园| 人间不正经生活手册</p>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:;">
-              <div class="img">
-                <img src="./img/cover.jpg">
-                <span class="num">71.4万</span>
-              </div>
-              <p class="">幼稚园| 人间不正经生活手册</p>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:;">
-              <div class="img">
-                <img src="./img/cover.jpg">
-                <span class="num">71.4万</span>
-              </div>
-              <p class="">幼稚园| 人间不正经生活手册</p>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:;">
-              <div class="img">
-                <img src="./img/cover.jpg">
-                <span class="num">71.4万</span>
-              </div>
-              <p class="">幼稚园| 人间不正经生活手册</p>
-            </a>
-          </li>
-        </ul>
+    <div class="tab-wrap">
+      <div class="recommand tab-item" id="page-1">
+        <h2>推荐歌单</h2>
+        <div class="">
+          <div class="songs">
+            <ul>
+              <li>
+                <a href="javascript:;">
+                  <div class="img">
+                    <img src="./img/cover.jpg">
+                    <span class="num">
+                      <i class="icon iconfont icon-erji"></i> 71.4万</span>
+                  </div>
+                  <p class="">幼稚园| 人间不正经生活手册</p>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:;">
+                  <div class="img">
+                    <img src="./img/cover.jpg">
+                    <span class="num">71.4万</span>
+                  </div>
+                  <p class="">幼稚园| 人间不正经生活手册</p>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:;">
+                  <div class="img">
+                    <img src="./img/cover.jpg">
+                    <span class="num">71.4万</span>
+                  </div>
+                  <p class="">幼稚园| 人间不正经生活手册</p>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:;">
+                  <div class="img">
+                    <img src="./img/cover.jpg">
+                    <span class="num">71.4万</span>
+                  </div>
+                  <p class="">幼稚园| 人间不正经生活手册</p>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:;">
+                  <div class="img">
+                    <img src="./img/cover.jpg">
+                    <span class="num">71.4万</span>
+                  </div>
+                  <p class="">幼稚园| 人间不正经生活手册</p>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:;">
+                  <div class="img">
+                    <img src="./img/cover.jpg">
+                    <span class="num">71.4万</span>
+                  </div>
+                  <p class="">幼稚园| 人间不正经生活手册</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="tab-item" id="page-2">
+        热歌榜
+      </div>
+      <div class="tab-item" id="page-3">
+        搜索
       </div>
     </div>
+
     <div class="new">
       <h2>最新音乐</h2>
       <div class="songs">
@@ -203,8 +215,15 @@
   </main>
   <footer>
     <div class="logo"></div>
-    <div class="auth">Summer 版权所有，详情访问<a href="http://github.com/HappyJeannie">我的 Gtihub</a></div>
+    <div class="auth">Summer 版权所有，详情访问
+      <a href="http://github.com/HappyJeannie">我的 Gtihub</a>
+    </div>
   </footer>
+  <script src="./../../node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="./../vendors/eventHub/event-hub.js"></script>
+  <script src="./js/tab.js"></script>
+  <script src="./js/page-1.js"></script>
+  <script src="./js/page-2.js"></script>
+  <script src="./js/page-3.js"></script>
 </body>
-
 </html>
