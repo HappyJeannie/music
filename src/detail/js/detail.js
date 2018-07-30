@@ -2,14 +2,14 @@
   let view = {
     el : '#app',
     tpl : `
-      <audio controls autoplay src="__url__"></audio>
+      <audio src="__url__"></audio>
       <div class="options">
         <button class="play">播放</button>
         <button class="pause">暂停</button>
       </div>
     `,
     render(data){
-      $(this.el).html(this.tpl.replace('__url__',data.url));
+      $(this.el).append(this.tpl.replace('__url__',data.url));
     },
     play(){
       let audio = $(this.el).find('audio').get(0);
@@ -60,8 +60,15 @@
     bindEvents(){
       this.getSongId();
       //点击播放音乐
-      $(this.view.el).on('click','.play',()=>{
-        this.view.play();
+      $(this.view.el).on('click','.disc',()=>{
+        if($(this.view.el).find('.disc').hasClass('active')){
+          this.view.pause();
+          $(this.view.el).find('.disc').removeClass('active');
+        }else{
+          this.view.play();
+          $(this.view.el).find('.disc').addClass('active');
+        }
+        
       })
       //点击暂停
       $(this.view.el).on('click','.pause',()=>{

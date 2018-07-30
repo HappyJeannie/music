@@ -1,0 +1,120 @@
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  color: #fff;
+  width: 100%;
+  z-index: 10;
+  div.head {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    padding: 0 10px;
+    width: 100%;
+    height: 54px;
+    box-sizing: border-box;
+    div.logo {
+      display: flex;
+      flex-direction: row;
+      line-height: 54px;
+      i {
+        font-size: 24px;
+        font-weight: 700;
+      }
+      h4 {
+        font-weight: normal;
+      }
+    }
+  }
+}
+#app{
+  width: 100vw;
+  height: 100vh;
+  padding-top: 63px;
+  div.cover{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background: url('./../img/cover.jpg') no-repeat center center;
+    background-size: cover;
+    filter: blur(8px);
+    z-index: -1;
+  }
+  div.music{
+    position: relative;
+    div.disc{
+      width: 248px;
+      height: 248px;
+      margin: 0 auto;
+      background: url('./../img/disc.png') no-repeat center  center;
+      background-size: cover;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation-play-state:paused;
+      &::before{
+        content: '';
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: url('./../img/disc_light.png') no-repeat center center;
+        background-size: cover;
+      }
+      div.song{
+        width: 150px;
+        height: 150px;
+        background: url('./../img/cover.jpg') no-repeat center center;
+        background-size: cover;
+        border-radius: 50%;
+      }
+      div.play{
+        width: 50px;
+        height: 50px;
+        background: url('./../img/pause.png') no-repeat center center;
+        background-size: cover;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+      }
+      &.active{
+        animation: rotate 10s infinite linear;
+        div.play{
+          display: none;
+        }
+      }
+      @keyframes rotate {
+        0% {
+          transform: rotate(0deg);
+        }
+        to {
+          -webkit-transform: rotate(1turn);
+          transform: rotate(1turn)
+        }
+      }
+    }
+    div.needle{
+      position: absolute;
+      top: -63px;
+      left: 50%;
+      z-index: 5;
+      width: 84px;
+      height: 122px;
+      background: url('./../img/needle.png') no-repeat;
+      background-size: contain;
+      transform: translateX(-25px);
+    }
+  }
+}
