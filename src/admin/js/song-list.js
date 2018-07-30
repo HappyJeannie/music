@@ -37,19 +37,25 @@
         "name":"歌曲1",
         "singer":"歌手1",
         "id":"1",
-        "url":"www.baidu.com"
+        "url":"www.baidu.com",
+        "cover":"",
+        "lyrics":""
       },
       {
         "name":"歌曲1",
         "singer":"歌手1",
         "id":"1",
-        "url":"www.baidu.com"
+        "url":"www.baidu.com",
+        "cover":"",
+        "lyrics":""
       },
       {
         "name":"歌曲1",
         "singer":"歌手1",
         "id":"1",
-        "url":"www.baidu.com"
+        "url":"www.baidu.com",
+        "cover":"",
+        "lyrics":""
       }
     ],
     fetchAll(){
@@ -136,6 +142,8 @@
         this.model.data[idx].name = data.name;
         this.model.data[idx].url = data.url;
         this.model.data[idx].singer = data.singer;
+        this.model.data[idx].cover = data.cover;
+        this.model.data[idx].lyrics = data.lyrics;
         this.view.render(this.model.data);
 			})
     },
@@ -164,12 +172,9 @@
         $li.addClass('active').siblings().removeClass('active');
         let idx = $li.index();
         let songInfo = {
-          id : this.model.data[idx].id,
           tableName : 'Songs',
-          singer : this.model.data[idx].singer,
-          name : this.model.data[idx].name,
-          url : this.model.data[idx].url,
           isNew : false,
+          ...this.model.data[idx]
         }
         // 点击编辑触发事件
         window.eventHub.emit('edit',songInfo);

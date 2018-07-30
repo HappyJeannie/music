@@ -120,14 +120,17 @@
 			})
 		},
 		editSong(songInfo){
+			console.log(songInfo)
 			// 保存到云端
 			let { tableName , name ,id ,singer,url,cover,lyrics} = songInfo;
 			// 第一个参数是 className，第二个参数是 objectId
 			let song = AV.Object.createWithoutData(tableName, id);
 			// 修改属性
-			song.set('name',name);
-			song.set('singer',singer);
-			song.set('url',url);
+			for(let key in songInfo){
+				if(key!= 'id' && key != 'tableName'){
+					song.set(key,songInfo[key]);
+				}
+			}
 			let that = this;
 			return new Promise((resolve,reject) => {
 				
@@ -135,6 +138,7 @@
 					(song) => {
 						let id = song.id;
 						console.log('更新成功')
+						console.log(song)
 						console.log(that.data);
 						that.data = {
 							id,
@@ -163,7 +167,7 @@
 			this.view.$el.on('submit','form',(e)=>{
 				alert('表单提交了')
 				e.preventDefault();
-				let names = ['name','singer','url'];
+				let names = ['name','singer','url','cover','lyrics'];
 				if(!this.checkForm(names)){
 					return false;
 				}
