@@ -22,9 +22,9 @@
 					</div>
 					<div class="form-group upload">
 						<label for="">
-							<span class="form-title">上传文件：</span>
-							<div id="container">
-								<button type="button" id="pickfiles"><i class="iconfont icon-cloudtouploadyunshangchuan"></i></button>
+							<span class="form-title">上传歌曲：</span>
+							<div id="containerSong">
+								<button type="button" class="pickfiles"><i class="iconfont icon-cloudtouploadyunshangchuan"></i></button>
 								<p class="tips">点击或拖拽文件，大小不超过 5 M</p>
 							</div>
 							<input type="hidden" name="songurl">
@@ -32,10 +32,32 @@
 					</div>
 					<div class="form-group fileurl">
 							<label for="">
-								<span class="form-title">资源路径：</span>
-								<input type="text" placeholder="资源路径" readonly value="__url__" name="url">
+								<span class="form-title">歌曲路径：</span>
+								<input type="text" placeholder="歌曲路径" readonly value="__url__" name="url">
 							</label>
 						</div>
+					<div class="form-group upload">
+						<label for="">
+							<span class="form-title">上传封面：</span>
+							<div id="containerCover">
+								<button type="button" class="pickfiles"><i class="iconfont icon-cloudtouploadyunshangchuan"></i></button>
+								<p class="tips">点击或拖拽文件，大小不超过 10 M</p>
+							</div>
+							<input type="hidden" name="coverurl">
+						</label>
+					</div>
+					<div class="form-group fileurl">
+							<label for="">
+								<span class="form-title">封面路径：</span>
+								<input type="text" placeholder="封面路径" readonly value="__cover__" name="cover">
+							</label>
+						</div>
+					<div class="form-group lyrics">
+						<label for="">
+							<span class="form-title">歌词：</span>
+							<textarea placeholder="歌词" name="lyrics" noresize>__lyrics__</textarea>
+						</label>
+					</div>
 					<div class="form-group submit">
 						<button type="submit" class="save">保存</button>
 						<button type="button" class="cancel">取消</button>
@@ -44,8 +66,9 @@
 			</div>
     `,
     render(data = {}){
-			let placeholders = ['name','url','singer','id','isNew'];
+			let placeholders = ['name','url','singer','id','isNew','cover','lyrics'];
 			let html = this.tpl;
+			console.log(data);
 			placeholders.map((str) => {
 				if(str === 'isNew'){
 					let title = data['isNew']? 'Add Song' : 'Edit Song';
@@ -67,7 +90,9 @@
 			name : '',			// 歌曲名称
 			url : '',				// 歌曲地址
 			singer : '',		// 歌手
-			id : ''					// 数据库中的id
+			id : '',					// 数据库中的id
+			cover : '',				// 歌曲的封面
+			lyrics : '' 			// 歌词
 		},
 		createSong(data){
 			// 声明类型
@@ -96,7 +121,7 @@
 		},
 		editSong(songInfo){
 			// 保存到云端
-			let { tableName , name ,id ,singer,url} = songInfo;
+			let { tableName , name ,id ,singer,url,cover,lyrics} = songInfo;
 			// 第一个参数是 className，第二个参数是 objectId
 			let song = AV.Object.createWithoutData(tableName, id);
 			// 修改属性
@@ -174,11 +199,14 @@
 			})
 		},
 		bindEventsHub(){
-			window.eventHub.on('upload',(data) => {
+			window.eventHub.on('uploadSong',(data) => {
 				// 上传文件后将文件信息赋值到表单
-				console.log('song from 模块得到了 data')
+				console.log(this.model.data);
+				console.log('song from 模块得到了歌曲 data')
 				console.log(data);
-				this.view.render(data);
+				Object.assign(this.model.data,data);
+				this.view.render(this.model.data);
+				console.log(this.model.data);
 			})
 
 			window.eventHub.on('edit',(data) => {
@@ -188,6 +216,15 @@
 				Object.assign(this.model.data,data);
 				this.view.render(this.model.data);
 				
+			})
+			window.eventHub.on('uploadCover',(data) => {
+				// 上传文件后将文件信息赋值到表单
+				console.log(this.model.data);
+				console.log('song from 模块得到了封面 data')
+				console.log(data);
+				Object.assign(this.model.data,data);
+				this.view.render(this.model.data);
+				console.log(this.model.data);
 			})
 		},
 		checkForm(names){

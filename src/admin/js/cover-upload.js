@@ -1,6 +1,6 @@
 {
   let view = {
-    el : '#containerSong',
+    el : '#containerCover',
     find(selector){
       return $(this.el).find(selector)[0]
     }
@@ -26,7 +26,7 @@
         // save_key: true,   // 默认 false。若在服务端生成uptoken的上传策略中指定了 `sava_key`，则开启，SDK会忽略对key的处理
         domain: 'http://pbznaxacr.bkt.clouddn.com/', //bucket 域名，下载资源时用到，**必需**
         get_new_uptoken: false, //设置上传文件的时候是否每次都重新获取新的token
-        container: 'containerSong', //上传区域DOM ID，默认是browser_button的父元素，
+        container: 'containerCover', //上传区域DOM ID，默认是browser_button的父元素，
         max_file_size: '5mb', //最大文件体积限制
         max_retries: 3, //上传失败最大重试次数
         dragdrop: true, //开启可拖曳上传
@@ -47,7 +47,7 @@
             // 每个文件上传前,处理相关的事情
             window.eventHub.emit('beforeUpload',{});
           },
-          'UploadProgress': (up, file) => {
+          'UploadProgress': (up, file)=> {
             // 每个文件上传时,处理相关的事情
             this.view.find('.tips').textContent='上传中';
           },
@@ -65,12 +65,12 @@
             var domain = up.getOption('domain');
             var res = JSON.parse(info.response);
             var sourceLink = domain + encodeURIComponent(res.key);
+            console.log('========')
             console.log(sourceLink);
             let data = {
-              url : sourceLink,
-              name: res.key
+              cover : sourceLink
             }
-            window.eventHub.emit('uploadSong',data)
+            window.eventHub.emit('uploadCover',data)
             that.initUpload();
           },
           'Error': function (up, err, errTip) {
@@ -97,9 +97,9 @@
       window.eventHub.on('update',(data) => {
         this.initUpload();
       })
-      window.eventHub.on('uploadCover',() => {
-				this.initUpload();
-			})
+      window.eventHub.on('uploadSong',() => {
+        this.initUpload();
+      })
     }
   }
 

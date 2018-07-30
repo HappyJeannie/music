@@ -3,14 +3,14 @@
     el : '#app',
     tpl : `
       <audio src="__url__"></audio>
-      <div class="options">
-        <button class="play">播放</button>
-        <button class="pause">暂停</button>
-      </div>
     `,
     render(data){
-      console.log(data);
       $(this.el).append(this.tpl.replace('__url__',data.url));
+      //$(this.el).find('audio').get(0).playbackRate = 3.0;
+      $(this.el).find('audio').get(0).onended = () => {
+        this.pause();
+        $(this.el).find('.music').removeClass('active');
+      }
     },
     play(){
       let audio = $(this.el).find('audio').get(0);
