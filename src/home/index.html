@@ -107,7 +107,7 @@
 
     <div class="new">
       <h2>最新音乐</h2>
-      <div class="songs">
+      <div class="songs" id="newSongList">
         <ul>
           <li>
             <div class="msg">
@@ -126,7 +126,7 @@
                 <i class="hot"></i>国风Dom.T - WOW</p>
             </div>
             <div class="play">
-              <i class="icon iconfont icon-play1"></i>
+              <a href=""><i class="icon iconfont icon-play1"></i></a>
             </div>
           </li>
           <li>
@@ -220,10 +220,13 @@
     </div>
   </footer>
   <script src="./../../node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="./../../node_modules/leancloud-storage/dist/av-min.js"></script>
+  <script src="./../vendors/initializers/av.js"></script>
   <script src="./../vendors/eventHub/event-hub.js"></script>
   <script src="./js/tab.js"></script>
   <script src="./js/page-1.js"></script>
   <script src="./js/page-2.js"></script>
   <script src="./js/page-3.js"></script>
+  <script src="./js/new-songs.js"></script>
 </body>
 </html>

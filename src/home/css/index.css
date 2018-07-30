@@ -236,6 +236,10 @@ main div.new div.songs ul li div.play {
   align-items: center;
   padding: 0 10px;
 }
+main div.new div.songs ul li div.play a {
+  display: block;
+  text-decoration: none;
+}
 main div.new div.songs ul li div.play i {
   font-size: 22px;
   color: #999;
