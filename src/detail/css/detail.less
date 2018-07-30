@@ -50,6 +50,17 @@ header {
   }
   div.music{
     position: relative;
+    width: 248px;
+    height: 248px;
+    margin: 0 auto;
+    &.active{
+      div.disc{
+        animation-play-state:running;
+      }
+      div.play{
+        display: none;
+      }
+    }
     div.disc{
       width: 248px;
       height: 248px;
@@ -60,6 +71,7 @@ header {
       display: flex;
       align-items: center;
       justify-content: center;
+      animation: rotate 20s infinite linear;
       animation-play-state:paused;
       &::before{
         content: '';
@@ -78,23 +90,8 @@ header {
         background-size: cover;
         border-radius: 50%;
       }
-      div.play{
-        width: 50px;
-        height: 50px;
-        background: url('./../img/pause.png') no-repeat center center;
-        background-size: cover;
-        border-radius: 50%;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-      }
-      &.active{
-        animation: rotate 10s infinite linear;
-        div.play{
-          display: none;
-        }
-      }
+      
+      
       @keyframes rotate {
         0% {
           transform: rotate(0deg);
@@ -104,6 +101,17 @@ header {
           transform: rotate(1turn)
         }
       }
+    }
+    div.play{
+      width: 50px;
+      height: 50px;
+      background: url('./../img/pause.png') no-repeat center center;
+      background-size: cover;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
     }
     div.needle{
       position: absolute;

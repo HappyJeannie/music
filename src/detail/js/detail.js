@@ -9,6 +9,7 @@
       </div>
     `,
     render(data){
+      console.log(data);
       $(this.el).append(this.tpl.replace('__url__',data.url));
     },
     play(){
@@ -31,6 +32,7 @@
       var query = new AV.Query('Songs');
       return query.get(this.data.id).then(function (song) {
         // 成功获得实例
+        console.log(song);
         let data = {
           id : song.id,
           name : song.attributes.name,
@@ -47,7 +49,6 @@
     init(view,model){
       this.view = view;
       this.model = model;
-      this.view.render(this.model.data);
       this.bindEvents();
       this.model.getSongDetail()
         .then(
@@ -60,19 +61,14 @@
     bindEvents(){
       this.getSongId();
       //点击播放音乐
-      $(this.view.el).on('click','.disc',()=>{
-        if($(this.view.el).find('.disc').hasClass('active')){
+      $(this.view.el).on('click','.music',()=>{
+        if($(this.view.el).find('.music').hasClass('active')){
           this.view.pause();
-          $(this.view.el).find('.disc').removeClass('active');
+          $(this.view.el).find('.music').removeClass('active');
         }else{
           this.view.play();
-          $(this.view.el).find('.disc').addClass('active');
+          $(this.view.el).find('.music').addClass('active');
         }
-        
-      })
-      //点击暂停
-      $(this.view.el).on('click','.pause',()=>{
-        this.view.pause();
       })
     },
     getSongId(){

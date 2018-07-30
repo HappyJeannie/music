@@ -51,6 +51,15 @@ header div.head div.logo h4 {
 }
 #app div.music {
   position: relative;
+  width: 248px;
+  height: 248px;
+  margin: 0 auto;
+}
+#app div.music.active div.disc {
+  animation-play-state: running;
+}
+#app div.music.active div.play {
+  display: none;
 }
 #app div.music div.disc {
   width: 248px;
@@ -62,6 +71,7 @@ header div.head div.logo h4 {
   display: flex;
   align-items: center;
   justify-content: center;
+  animation: rotate 20s infinite linear;
   animation-play-state: paused;
 }
 #app div.music div.disc::before {
@@ -81,7 +91,16 @@ header div.head div.logo h4 {
   background-size: cover;
   border-radius: 50%;
 }
-#app div.music div.disc div.play {
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(1turn);
+    transform: rotate(1turn);
+  }
+}
+#app div.music div.play {
   width: 50px;
   height: 50px;
   background: url('../img/pause.png') no-repeat center center;
@@ -91,21 +110,6 @@ header div.head div.logo h4 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-}
-#app div.music div.disc.active {
-  animation: rotate 10s infinite linear;
-}
-#app div.music div.disc.active div.play {
-  display: none;
-}
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(1turn);
-    transform: rotate(1turn);
-  }
 }
 #app div.music div.needle {
   position: absolute;
