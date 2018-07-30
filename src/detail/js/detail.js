@@ -7,10 +7,6 @@
     render(data){
       $(this.el).append(this.tpl.replace('__url__',data.url));
       //$(this.el).find('audio').get(0).playbackRate = 3.0;
-      $(this.el).find('audio').get(0).onended = () => {
-        this.pause();
-        $(this.el).find('.music').removeClass('active');
-      }
     },
     play(){
       let audio = $(this.el).find('audio').get(0);
@@ -26,7 +22,9 @@
       id:'',
       name:'',
       singer:'',
-      url:''
+      url:'',
+      cover:'',
+      lyrics:''
     },
     getSongDetail(){
       var query = new AV.Query('Songs');
@@ -35,10 +33,9 @@
         console.log(song);
         let data = {
           id : song.id,
-          name : song.attributes.name,
-          singer : song.attributes.singer,
-          url : song.attributes.url
+          ...song.attributes
         };
+        console.log(data);
         return data;
       }, function (error) {
         // 异常处理
@@ -55,6 +52,10 @@
           (res) => {
             this.model.data = res;
             this.view.render(this.model.data);
+            // 监听音乐播放完毕
+            this.songEnded();
+            // 添加cover
+            this.addCover();
           }
         )
     },
@@ -70,10 +71,25 @@
           $(this.view.el).find('.music').addClass('active');
         }
       })
+      
     },
     getSongId(){
       let songId = window.location.href.split('?')[1].split('=')[1];
       this.model.data.id = songId;
+    },
+    songEnded(){
+      $(this.view.el).find('audio').get(0).onended = () => {
+        this.view.pause();
+        $(this.view.el).find('.music').removeClass('active');
+      }
+    },
+    addCover(){
+      $(this.view.el).find('.cover').css({
+        'background-image':`url(${this.model.data.cover})`
+      })
+      $(this.view.el).find('.song').css({
+        'background-image':`url(${this.model.data.cover})`
+      })
     }
   }
   controller.init(view,model);
