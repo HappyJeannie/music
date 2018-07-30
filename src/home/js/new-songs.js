@@ -9,7 +9,7 @@
             <i class="hot"></i>__singer__</p>
         </div>
         <div class="play">
-          <a href="__url__"><i class="icon iconfont icon-play1"></i></a>
+          <a href="./../detail/index.html?id=__id__"><i class="icon iconfont icon-play1"></i></a>
         </div>
       </li>
     `,
