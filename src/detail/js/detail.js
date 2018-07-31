@@ -59,7 +59,6 @@
           (res) => {
             this.model.data = res;
             this.view.render(this.model.data);
-            this.view.play();
             // 监听音乐播放完毕
             this.songEnded();
             // 添加cover

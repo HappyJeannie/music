@@ -71,6 +71,16 @@ header div.logo span.text {
   margin-right: 4px;
   vertical-align: top;
 }
+header div.page {
+  line-height: 60px;
+  margin-right: 20px;
+  font-size: 12px;
+}
+header div.page a {
+  padding-left: 6px;
+  text-decoration: none;
+  vertical-align: top;
+}
 header div.add {
   margin-right: 20px;
   color: #333;
@@ -339,6 +349,47 @@ main div.editbox div.box form div.form-group.lyrics label textarea {
 }
 main div.editbox div.box form div.form-group.lyrics label textarea:focus {
   outline: none;
+}
+main div.editbox div.box form div.form-group.select {
+  height: 200px;
+}
+main div.editbox div.box form div.form-group.select div.select-box {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-between;
+}
+main div.editbox div.box form div.form-group.select div.select-box div.songs {
+  width: 200px;
+  padding: 0px;
+  overflow-y: auto;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+}
+main div.editbox div.box form div.form-group.select div.select-box div.songs ul {
+  padding: 10px;
+}
+main div.editbox div.box form div.form-group.select div.select-box div.songs ul li {
+  font-size: 12px;
+  line-height: 26px;
+  border-bottom: 1px solid #e6e6e6;
+}
+main div.editbox div.box form div.form-group.select div.select-box div.songs ul li label {
+  width: 100%;
+  overflow: hidden;
+  display: block;
+}
+main div.editbox div.box form div.form-group.select div.select-box div.songs ul li label input {
+  margin-right: 4px;
+}
+main div.editbox div.box form div.form-group.select div.select-box span {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 28px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  margin: 85px 10px;
 }
 .loading {
   position: fixed;

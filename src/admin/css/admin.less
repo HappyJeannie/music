@@ -66,6 +66,16 @@ header{
       vertical-align: top;
     }
   }
+  div.page{
+    line-height: 60px;
+    margin-right:20px;
+    font-size: 12px;
+    a{
+      padding-left: 6px;
+      text-decoration: none;
+      vertical-align: top;
+    }
+  }
   div.add{
     margin-right: 20px;
     color: #333;
@@ -342,6 +352,47 @@ main{
                 &:focus{
                   outline: none;
                 }
+              }
+            }
+          }
+          &.select{
+            height: 200px;
+            div.select-box{
+              display: flex;
+              flex-direction: row;
+              align-content: center;
+              justify-content: space-between;
+              div.songs{
+                width: 200px;
+                padding: 0px;
+                overflow-y: auto;
+                border: 1px solid #e6e6e6;
+                border-radius: 4px;
+                ul{
+                  padding: 10px;
+                  li{
+                    font-size: 12px;
+                    line-height: 26px;
+                    border-bottom: 1px solid #e6e6e6;
+                    label{
+                      width: 100%;
+                      overflow: hidden;
+                      display: block;
+                      input{
+                        margin-right: 4px;
+                      }
+                    }
+                  }
+                }
+              }
+              span{
+                width: 30px;
+                height: 30px;
+                text-align: center;
+                line-height: 28px;
+                border: 1px solid #aaa;
+                border-radius: 4px;
+                margin: 85px 10px;
               }
             }
           }

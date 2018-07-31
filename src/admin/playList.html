@@ -18,13 +18,12 @@
 			<span class="text">Music Admin</span>
 		</div>
 		<div class="page">
-			<i class="icon iconfont icon-app"></i><a href="./playList.html">歌单管理</a>
+			<i class="icon iconfont icon-MUSIC"></i><a href="./index.html">歌曲上传</a>
 		</div>
-		
 	</header>
 	<main>
 		<div class="songs">
-			<h4 class="title"><i class="iconfont icon-app"></i>Songs List</h4>
+			<h4 class="title"><i class="iconfont icon-app"></i>playList</h4>
 			<div id="songs-container">
 				
 			</div>
@@ -41,14 +40,15 @@
 	<div class="tips">选择文件</div> 
 	<script src="./../vendors/leancloud/av-min.js"></script>
 	<script src="./../vendors/moxie/moxie.js"></script>
-	<script type="text/javascript" src="./../vendors/qiniu/qiniu.min.js"></script>
+	<!-- <script type="text/javascript" src="./../vendors/qiniu/qiniu.min.js"></script> -->
+	<script type="text/javascript" src="./../../node_modules/qiniu-js/dist/qiniu.min.js"></script>
 	<script type="text/javascript" src="./../vendors/plupload/plupload.min.js"></script>
 	<script src="./../vendors/jquery/jquery.min.js"></script>
 	<script src="./../vendors/eventHub/event-hub.js"></script>
 
 	<!--<script src="./js/new-song.js"></script>-->
 	<script src="./../vendors/initializers/av.js"></script>
-	<script src="./js/song-form.js"></script>
+	<script src="./js/playlist-form.js"></script>
 	<script src="./js/song-list.js"></script>
 
 	<script src="./js/song-upload.js"></script>
