@@ -13,6 +13,7 @@
         let a = arr[i].match(reg);
         let time = parseInt(a[1].substr(0,2)) * 60 * 1000 + parseInt(a[1].substr(3,2)) * 1000 + parseInt(a[1].substr(6,2)) + 1000;
         $(this.el).find('.lyrics').append(`<p class='${i===0? "active" : ""}' data-time='${time}'>${a[2]}</p>`)
+        $(this.el).find('.title').html(data.name);
       }
     },
     play(){
@@ -88,6 +89,10 @@
       $(this.view.el).find('audio').get(0).onended = () => {
         this.view.pause();
         $(this.view.el).find('.music').removeClass('active');
+        target.attr('data-top',0).css({
+          transform:`translateY(0px)`
+        })
+
       }
     },
     addCover(){
@@ -111,10 +116,12 @@
         }
         $(allP[idx]).addClass('active').siblings().removeClass('active');
         let pTop = $(allP[idx]).offset().top;
-        let lyricsTop = $(this.view.el).find('.lyrics').offset().top;
+        let lyricsTop = $(this.view.el).find('.lyrics-box').offset().top;
         let target = $(this.view.el).find('.lyrics');
         let scroll = parseInt(target.attr('data-top'))+pTop-lyricsTop - 26 > 0 ? parseInt(target.attr('data-top'))+pTop-lyricsTop - 26 : 0;
-        target.attr('data-top',scroll).scrollTop(scroll)
+        target.attr('data-top',scroll).css({
+          transform:`translateY(-${scroll}px)`
+        })
         //target.attr('data-top',scroll).animate({scrollTop: scroll+'px'}, 300);
       }
     }
