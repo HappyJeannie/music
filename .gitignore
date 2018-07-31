@@ -1,4 +1,4 @@
-node_modules
+/node_modules
 /qiniu-config.json
 /oss-data.csv
 /oss
