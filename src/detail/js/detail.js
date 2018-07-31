@@ -11,7 +11,7 @@
       for(let i = 0;i<arr.length;i++){
         let reg = /\[([\d:.]+)\](.+)/;
         let a = arr[i].match(reg);
-        let time = parseInt(a[1].substr(0,2)) * 60 * 1000 + parseInt(a[1].substr(3,2)) * 1000 + parseInt(a[1].substr(6,2)) + 4000;
+        let time = parseInt(a[1].substr(0,2)) * 60 * 1000 + parseInt(a[1].substr(3,2)) * 1000 + parseInt(a[1].substr(6,2)) + 1000;
         $(this.el).find('.lyrics').append(`<p class='${i===0? "active" : ""}' data-time='${time}'>${a[2]}</p>`)
       }
     },
@@ -37,12 +37,10 @@
       var query = new AV.Query('Songs');
       return query.get(this.data.id).then(function (song) {
         // 成功获得实例
-        console.log(song);
         let data = {
           id : song.id,
           ...song.attributes
         };
-        console.log(data);
         return data;
       }, function (error) {
         // 异常处理
@@ -103,21 +101,19 @@
     songPlaying(){
       $(this.view.el).find('audio').get(0).ontimeupdate = (e)=>{
         let currentTime = parseInt(e.timeStamp);
-        console.log(currentTime / 1000)
         let allP = $(this.view.el).find('.lyrics>p');
         let idx = 0;
-        let minTime = Math.abs(currentTime - parseInt($(allP[0]).attr('data-time')));
-        for(let i = 1;i<allP.length;i++){
-          if(Math.abs(parseInt($(allP[i]).attr('data-time')) - currentTime) < minTime){
-            minTime = Math.abs(parseInt($(allP[i]).attr('data-time')) - currentTime);
+        for(let i = 0;i<allP.length;i++){
+          if(currentTime >= $(allP[i]).attr('data-time') && currentTime <= $(allP[i+1]).attr('data-time') ){
             idx = i;
+            break;
           }
         }
         $(allP[idx]).addClass('active').siblings().removeClass('active');
         let pTop = $(allP[idx]).offset().top;
         let lyricsTop = $(this.view.el).find('.lyrics').offset().top;
         let target = $(this.view.el).find('.lyrics');
-        let scroll = parseInt(target.attr('data-top'))+pTop-lyricsTop - 26;
+        let scroll = parseInt(target.attr('data-top'))+pTop-lyricsTop - 26 > 0 ? parseInt(target.attr('data-top'))+pTop-lyricsTop - 26 : 0;
         target.attr('data-top',scroll).scrollTop(scroll)
         //target.attr('data-top',scroll).animate({scrollTop: scroll+'px'}, 300);
       }
