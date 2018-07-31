@@ -2,10 +2,11 @@
   let view = {
     el : '#app',
     tpl : `
-      <audio src="__url__"></audio>
+      <audio src="__url__" controls></audio>
     `,
     render(data){
       $(this.el).append(this.tpl.replace('__url__',data.url));
+      log(data.url)
       //$(this.el).find('audio').get(0).playbackRate = 3.0;
       let arr = data.lyrics.split('\n');
       for(let i = 0;i<arr.length;i++){
@@ -58,6 +59,7 @@
           (res) => {
             this.model.data = res;
             this.view.render(this.model.data);
+            this.view.play();
             // 监听音乐播放完毕
             this.songEnded();
             // 添加cover
@@ -71,7 +73,9 @@
       this.getSongId();
       //点击播放音乐
       $(this.view.el).on('click','.music',()=>{
+        
         if($(this.view.el).find('.music').hasClass('active')){
+          
           this.view.pause();
           $(this.view.el).find('.music').removeClass('active');
         }else{
@@ -106,6 +110,7 @@
     songPlaying(){
       $(this.view.el).find('audio').get(0).ontimeupdate = (e)=>{
         let currentTime = parseInt(e.timeStamp);
+        log(currentTime);
         let allP = $(this.view.el).find('.lyrics>p');
         let idx = 0;
         for(let i = 0;i<allP.length;i++){
