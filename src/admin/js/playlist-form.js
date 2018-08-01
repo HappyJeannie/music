@@ -19,6 +19,12 @@
 							<span class="form-title">播放量：</span>
 							<input type="text" placeholder="播放量" name="amount" value="__amount__">
 						</label>
+          </div>
+          <div class="form-group">
+						<label for="">
+							<span class="form-title">简介：</span>
+							<input type="text" placeholder="简介" name="summary" value="__summary__">
+						</label>
 					</div>
 					<div class="form-group upload">
 						<label for="">
@@ -41,21 +47,11 @@
 							<span class="form-title">添加歌曲：</span>
               <div class="select-box">
                 <div class="songs">
-                  <ul>
-                    <li>歌曲一</li>
-                    <li>歌曲一</li>
-                    <li>歌曲一</li>
-                    <li>歌曲一</li>
+                  <ul id="selected">
                   </ul>
                 </div>
                 <span>&lt;=</span>
-                <div class="songs list">
-                  <ul>
-                    <li><label><input type="checkbox" name="song">歌曲一</label></li>
-                    <li><label><input type="checkbox" name="song">歌曲一</label></li>
-                    <li><label><input type="checkbox" name="song">歌曲一</label></li>
-                    <li><label><input type="checkbox" name="song">歌曲一</label></li>
-                  </ul>
+                <div class="songs list" id="songList">
                 </div>
               </div>
 						</label>
@@ -66,8 +62,11 @@
 				</form>
 			</div>
     `,
+    liTpl:`
+      <li>__song__ - __singer__</li>
+    `,
     render(data = {}){
-			let placeholders = ['name','url','singer','id','isNew','cover','lyrics','amount'];
+			let placeholders = ['name','url','singer','id','isNew','cover','lyrics','amount','summary'];
 			let html = this.tpl;
 			console.log(data);
 			placeholders.map((str) => {
@@ -80,79 +79,61 @@
 				
 			})
       $(this.el).html(html);
-		},
+    },
+    addSelect(data){
+      console.log(data);
+      let html = '';
+      for(let i = 0;i<data.length;i++){
+        html += this.liTpl.replace('__song__',data[i].name).replace('__singer__',data[i].singer);
+      }
+      $(this.el).find('#selected').html(html);
+    },
 		reset(data){
-			this.render(data || {});
+			let placeholders = ['name','cover','amount','summary'];
+			for(let i = 0;i<placeholders.length;i++){
+				$(this.el).find(`[name=${placeholders[i]}]`).val('')
+			}
+			$(this.el).find('#songList input').each((idx,item)=>{
+				if($(item).prop('checked')){
+					$(item).trigger('click');
+				}
+			})
 		}
   }
   let model = {
 		data:{
 			isNew : true ,
-			name : '',			// 歌曲名称
-			url : '',				// 歌曲地址
-			singer : '',		// 歌手
-			id : '',					// 数据库中的id
-			cover : '',				// 歌曲的封面
-			lyrics : '' 			// 歌词
+			amount : '',			// 歌曲名称
+      cover:'',			// 歌词
+			songs:[],
+			summary:''
 		},
-		createSong(data){
-			// 声明类型
-			let Song = AV.Object.extend('Songs');
-			// 新建对象
-			let song = new Song();
-			for(var item in data){
-				song.set(item,data[item]);
+		createPlay(data){
+			console.log('创建歌单数据')
+			console.log(data);
+      var Song = AV.Object.extend('Songs');// 广州
+      
+      
+      let playList = AV.Object.extend('playList');// 广东
+			let playlist = new playList();
+      for(var item in data){
+        if(item != 'songs'){
+          playlist.set(item,data[item]);
+        }
 			}
-			let that = this;
-			return new Promise((resolve,reject) =>{
-				song.save().then(function (song) {
-					let id = song.id;
-					console.log(that.data);
-					that.data = {
-						id,
-						...song.attributes
-					}
-					resolve(that.data);
-					
-					//that.view.render({})
-				}, function (error) {
-					reject(error);
-				});
-			})
-		},
-		editSong(songInfo){
-			console.log(songInfo)
-			// 保存到云端
-			let { tableName , name ,id ,singer,url,cover,lyrics} = songInfo;
-			// 第一个参数是 className，第二个参数是 objectId
-			let song = AV.Object.createWithoutData(tableName, id);
-			// 修改属性
-			for(let key in songInfo){
-				if(key!= 'id' && key != 'tableName'){
-					song.set(key,songInfo[key]);
-				}
-			}
-			let that = this;
-			return new Promise((resolve,reject) => {
-				
-				song.save().then(
-					(song) => {
-						let id = song.id;
-						console.log('更新成功')
-						console.log(song)
-						console.log(that.data);
-						that.data = {
-							id,
-							...song.attributes
+		
+      for(let i = 0;i<data.songs.length;i++){
+        let song = AV.Object.createWithoutData('Songs', data.songs[i].id);
+        song.set('dependent', playlist);// 为广州设置 dependent 属性为广东
+        song.save().then(function (song) {
+					console.log('新建关联')
+						console.log(song);
+						if(i === data.songs.length - 1){
+							window.eventHub.emit('createList')
 						}
-						resolve(that.data);
-					},
-					(error) => {
-						reject(error);
-					}
-				)
-			})
-			
+				});
+				
+      }
 		}
   }
   let controller = {
@@ -162,75 +143,43 @@
       this.model = model;
 			this.view.render(this.model.data);
 			this.bindEvents();
-			this.bindEventsHub();
+      this.bindEventsHub();
 		},
 		bindEvents(){
 			this.view.$el.on('submit','form',(e)=>{
 				alert('表单提交了')
 				e.preventDefault();
-				let names = ['name','singer','url','cover','lyrics'];
+				let names = ['name','cover','amount','summary'];
 				if(!this.checkForm(names)){
 					return false;
-				}
+        }
+        console.log(this.model.data);
+        if(this.model.data.songs.length === 0){
+          alert('请选择歌曲');
+          return false;
+        }
 				let hash = {};
 				names.map((item) => {
 					hash[item] = this.view.$el.find(`[name="${item}"]`).val();
-				})
+        })
+        hash['songs'] = this.model.data.songs;
 				console.log(hash);
-				if(this.model.data.isNew){
-					alert('新增数据')
-					this.model.createSong(hash)
-					.then((res) => {
-						console.log('添加完了之后的操作')
-						console.log(res);
-						this.view.reset();
-						window.eventHub.emit('create',res)
-					});
-				}else{
-					alert('编辑数据')
-					hash.id = this.model.data.id;
-					hash.tableName = 'Songs';
-					this.model.editSong(hash)
-					.then((res) => {
-						console.log('编辑完了之后的操作')
-						console.log(res);
-						this.model.data.isNew = true;
-						this.view.reset({'isNew':true});
-						window.eventHub.emit('update',res);
-					});
-				}
-				
-				
+				this.model.createPlay(hash);
+				this.view.reset();
 			})
 		},
 		bindEventsHub(){
-			window.eventHub.on('uploadSong',(data) => {
-				// 上传文件后将文件信息赋值到表单
-				console.log(this.model.data);
-				console.log('song from 模块得到了歌曲 data')
-				console.log(data);
-				Object.assign(this.model.data,data);
-				this.view.render(this.model.data);
-				console.log(this.model.data);
-			})
-
-			window.eventHub.on('edit',(data) => {
-				// 编辑文件后 表单接收数据
-				console.log('表单数据');
-				console.log(data);
-				Object.assign(this.model.data,data);
-				this.view.render(this.model.data);
-				
-			})
-			window.eventHub.on('uploadCover',(data) => {
-				// 上传文件后将文件信息赋值到表单
-				console.log(this.model.data);
-				console.log('song from 模块得到了封面 data')
-				console.log(data);
-				Object.assign(this.model.data,data);
-				this.view.render(this.model.data);
-				console.log(this.model.data);
-			})
+			window.eventHub.on('select',(data) => {
+        // 上传文件后将文件信息赋值到表单
+        console.log('接收数据')
+        console.log(data);
+        this.model.data.songs = data;
+        this.view.addSelect(this.model.data.songs);
+      })
+      window.eventHub.on('uploadCover',(data)=>{
+        this.model.data.cover = data.cover;
+        $(this.view.el).find('input[name="cover"]').val(this.model.data.cover);
+      })
 		},
 		checkForm(names){
 			let canSubmit = true;

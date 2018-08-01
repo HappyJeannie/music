@@ -362,9 +362,10 @@ main div.editbox div.box form div.form-group.select div.select-box {
 main div.editbox div.box form div.form-group.select div.select-box div.songs {
   width: 200px;
   padding: 0px;
-  overflow-y: auto;
   border: 1px solid #e6e6e6;
   border-radius: 4px;
+  height: 200px;
+  overflow-y: auto;
 }
 main div.editbox div.box form div.form-group.select div.select-box div.songs ul {
   padding: 10px;
@@ -379,7 +380,7 @@ main div.editbox div.box form div.form-group.select div.select-box div.songs ul 
   overflow: hidden;
   display: block;
 }
-main div.editbox div.box form div.form-group.select div.select-box div.songs ul li label input {
+main div.editbox div.box form div.form-group.select div.select-box div.songs ul li input {
   margin-right: 4px;
 }
 main div.editbox div.box form div.form-group.select div.select-box span {
