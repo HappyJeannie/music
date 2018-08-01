@@ -17,15 +17,13 @@
     render(data){
       let $html = '';
       console.log(data);
-      for(let j = 0;j<6;j++){
-        for(let i = 0;i<data.length;i++){
-          let $li = this.liTpl;
-          for(var key in data[i]){
-            $li = $li.replace(`__${key}__`,data[i][key]);
-          }
-          console.log($li)
-          $html += $li;
+      for(let i = 0;i<data.length;i++){
+        let $li = this.liTpl;
+        for(var key in data[i]){
+          $li = $li.replace(`__${key}__`,data[i][key]);
         }
+        console.log($li)
+        $html += $li;
       }
       
       let html = this.ulTpl.replace('__list__',$html);
