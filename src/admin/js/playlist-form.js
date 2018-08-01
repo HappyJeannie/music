@@ -111,29 +111,33 @@
 		createPlay(data){
 			console.log('创建歌单数据')
 			console.log(data);
-      var Song = AV.Object.extend('Songs');// 广州
-      
-      
       let playList = AV.Object.extend('playList');// 广东
 			let playlist = new playList();
       for(var item in data){
-        if(item != 'songs'){
-          playlist.set(item,data[item]);
-        }
+        playlist.set(item,data[item]);
 			}
-		
-      for(let i = 0;i<data.songs.length;i++){
-        let song = AV.Object.createWithoutData('Songs', data.songs[i].id);
-        song.set('dependent', playlist);// 为广州设置 dependent 属性为广东
-        song.save().then(function (song) {
-					console.log('新建关联')
-						console.log(song);
-						if(i === data.songs.length - 1){
-							window.eventHub.emit('createList')
-						}
-				});
+			return playlist.save()
+				.then((res) => {
+					console.log('存储成功')
+					console.log(res);
+					let list = {
+						id : res.id,
+						...res.attributes
+					}
+					return list;
+				})
+      // for(let i = 0;i<data.songs.length;i++){
+      //   let song = AV.Object.createWithoutData('Songs', data.songs[i].id);
+      //   song.set('dependent', playlist);// 为广州设置 dependent 属性为广东
+      //   song.save().then(function (song) {
+			// 		console.log('新建关联')
+			// 			console.log(song);
+			// 			if(i === data.songs.length - 1){
+			// 				window.eventHub.emit('createList')
+			// 			}
+			// 	});
 				
-      }
+      // }
 		}
   }
   let controller = {
@@ -164,8 +168,14 @@
         })
         hash['songs'] = this.model.data.songs;
 				console.log(hash);
-				this.model.createPlay(hash);
-				this.view.reset();
+				this.model.createPlay(hash)
+					.then((res)=>{
+						console.log('返回到 controller');
+						console.log(res);
+						window.eventHub.emit('createList',res);
+						this.view.reset();
+					});
+				
 			})
 		},
 		bindEventsHub(){
