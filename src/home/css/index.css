@@ -204,6 +204,7 @@ main div.new div.songs ul li {
   border-bottom: 1px solid #efefef;
   padding: 6px 0px;
   width: 100%;
+  margin-bottom: 0px;
 }
 main div.new div.songs ul li div.msg {
   -webkit-box-flex: 1;

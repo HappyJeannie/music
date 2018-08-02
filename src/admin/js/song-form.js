@@ -69,6 +69,7 @@
 			let placeholders = ['name','url','singer','id','isNew','cover','lyrics'];
 			let html = this.tpl;
 			console.log(data);
+			
 			placeholders.map((str) => {
 				if(str === 'isNew'){
 					let title = data['isNew']? 'Add Song' : 'Edit Song';
@@ -76,9 +77,9 @@
 				}else{
 					html = html.replace(`__${str}__`,data[str] || '');
 				}
-				
 			})
-      $(this.el).html(html);
+			$(this.el).html(html);
+			
 		},
 		reset(data){
 			this.render(data || {});
@@ -165,7 +166,6 @@
 		},
 		bindEvents(){
 			this.view.$el.on('submit','form',(e)=>{
-				alert('表单提交了')
 				e.preventDefault();
 				let names = ['name','singer','url','cover','lyrics'];
 				if(!this.checkForm(names)){
@@ -177,16 +177,23 @@
 				})
 				console.log(hash);
 				if(this.model.data.isNew){
-					alert('新增数据')
 					this.model.createSong(hash)
 					.then((res) => {
 						console.log('添加完了之后的操作')
 						console.log(res);
 						this.view.reset();
-						window.eventHub.emit('create',res)
+						window.eventHub.emit('create',res);
+						this.model.data = {
+							isNew : true ,
+							name : '',
+							url : '',
+							singer : '',
+							id : '',	
+							cover : '',	
+							lyrics : '' 
+						}
 					});
 				}else{
-					alert('编辑数据')
 					hash.id = this.model.data.id;
 					hash.tableName = 'Songs';
 					this.model.editSong(hash)
@@ -195,6 +202,15 @@
 						console.log(res);
 						this.model.data.isNew = true;
 						this.view.reset({'isNew':true});
+						this.model.data = {
+							isNew : true ,
+							name : '',
+							url : '',
+							singer : '',
+							id : '',	
+							cover : '',	
+							lyrics : '' 
+						}
 						window.eventHub.emit('update',res);
 					});
 				}
@@ -218,7 +234,9 @@
 				console.log('表单数据');
 				console.log(data);
 				Object.assign(this.model.data,data);
+				console.log(this.model.data);
 				this.view.render(this.model.data);
+				window.eventHub.emit('reinit',{});
 				
 			})
 			window.eventHub.on('uploadCover',(data) => {

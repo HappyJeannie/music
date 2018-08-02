@@ -177,6 +177,8 @@
           ...this.model.data[idx]
         }
         // 点击编辑触发事件
+        console.log('编辑歌曲')
+        console.log(songInfo);
         window.eventHub.emit('edit',songInfo);
       })
     }

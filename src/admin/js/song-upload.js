@@ -99,7 +99,10 @@
       })
       window.eventHub.on('uploadCover',() => {
 				this.initUpload();
-			})
+      })
+      window.eventHub.on('reinit',()=>{
+        this.initUpload();
+      });
     }
   }
 

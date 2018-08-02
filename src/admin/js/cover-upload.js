@@ -100,6 +100,9 @@
       window.eventHub.on('uploadSong',() => {
         this.initUpload();
       })
+      window.eventHub.on('reinit',()=>{
+        this.initUpload();
+      });
     }
   }
 

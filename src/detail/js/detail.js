@@ -2,7 +2,7 @@
   let view = {
     el : '#app',
     tpl : `
-      <audio src="__url__" controls></audio>
+      <audio src="__url__"></audio>
     `,
     render(data){
       $(this.el).append(this.tpl.replace('__url__',data.url));
@@ -12,10 +12,11 @@
       for(let i = 0;i<arr.length;i++){
         let reg = /\[([\d:.]+)\](.+)/;
         let a = arr[i].match(reg);
-        let time = parseInt(a[1].substr(0,2)) * 60 * 1000 + parseInt(a[1].substr(3,2)) * 1000 + parseInt(a[1].substr(6,2)) + 1000;
+        let time = parseInt(a[1].substr(0,2)) * 60 * 1000 + parseInt(a[1].substr(3,2)) * 1000 + parseInt(a[1].substr(6,2));
         $(this.el).find('.lyrics').append(`<p class='${i===0? "active" : ""}' data-time='${time}'>${a[2]}</p>`)
         $(this.el).find('.title').html(data.name);
       }
+      log(222);
     },
     play(){
       let audio = $(this.el).find('audio').get(0);
@@ -57,8 +58,10 @@
       this.model.getSongDetail()
         .then(
           (res) => {
+            log('add data')
             this.model.data = res;
             this.view.render(this.model.data);
+            log('rendered');
             // 监听音乐播放完毕
             this.songEnded();
             // 添加cover
